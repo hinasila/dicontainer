@@ -1,133 +1,95 @@
-name: Build
-on: [push, pull_request]
+name: CI
+
+on:
+    pull_request:
+        branches:
+            - "main"
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
 jobs:
+    lint:
+        strategy:
+            matrix:
+                php: [7.2]
 
-  lint:
-    strategy:
-      matrix:
-        operating-system: [ubuntu-latest]
-        php-versions: ['7.4']
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-    runs-on: ${{ matrix.operating-system }}
-    steps:
-      - uses: actions/checkout@v2
+            - name: Setup PHP, with composer and extensions
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php }}
+                  coverage: none
 
-      - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-versions }}
-          tools: phpcs, phpstan
-          coverage: none
+            - name: Validate composer.json and composer.lock
+              run: composer validate
 
-      - name: Show composer version
-        run: composer -V
+            - name: Install dependencies
+              if: steps.composer-cache.outputs.cache-hit != 'true'
+              run: composer install --prefer-dist --no-progress --no-suggest
 
-      - name: Validate composer.json and composer.lock
-        run: composer validate
+            - name: Install project deps
+              run: composer install --no-progress
 
-      - name: Cache Composer packages
-        id: composer-cache
-        uses: actions/cache@v2
-        with:
-          path: vendor
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
+            - name: Install tools
+              run: composer bin tools install --no-progress
 
-      - name: Install dependencies
-        if: steps.composer-cache.outputs.cache-hit != 'true'
-        run: composer install --prefer-dist --no-progress --no-suggest
+            - name: Check style
+              run: vendor-bin/tools/vendor/bin/phpcs
 
-      - name: Show installed coding standards
-        run: vendor/bin/phpcs -i
+            - name: Run PHPStan
+              run: vendor-bin/tools/vendor/bin/phpstan analyse
 
-      - name: coding standard
-        run: vendor/bin/phpcs
+    test:
+        strategy:
+            fail-fast: false
+            matrix:
+                php: [7.2, 7.3, 7.4]
 
-      - name: phpstan
-        run: phpstan analyse
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-  coverage:
-    strategy:
-      matrix:
-        operating-system: [ubuntu-latest]
-        php-versions: ['7.4']
+            - name: Setup PHP, with composer and extensions
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php }}
+                  coverage: none
 
-    runs-on: ${{ matrix.operating-system }}
-    steps:
-      - uses: actions/checkout@v2
+            - name: Install project deps
+              run: composer install --no-progress
 
-      - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-versions }}
-          coverage: xdebug
+            - name: Install tools
+              run: composer bin tools install --no-progress
 
-      - name: Show composer version
-        run: composer -V
+            - name: Run tests
+              run: vendor-bin/tools/vendor/bin/phpunit
 
-      - name: Validate composer.json and composer.lock
-        run: composer validate
+    php8:
+        strategy:
+            fail-fast: false
+            matrix:
+                php: [8.0, 8.1, 8.2, 8.3, 8.4]
 
-      - name: Cache Composer packages
-        id: composer-cache
-        uses: actions/cache@v2
-        with:
-          path: vendor
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Install dependencies
-        if: steps.composer-cache.outputs.cache-hit != 'true'
-        run: composer install --prefer-dist --no-progress --no-suggest
+            - name: Setup PHP, with composer and extensions
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php }}
+                  coverage: none
 
-      - name: install php-coveralls
-        run: composer require twinh/php-coveralls --dev --no-progress --no-suggest
+            - name: Install project deps
+              run: composer install --no-progress
 
-      - name: generate code coverage phpunit
-        run: vendor/bin/phpunit --coverage-clover=build/logs/clover.xml
+            - name: Install tools
+              run: composer bin tools install --no-progress
 
-      - name: Coveralls
-        env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: vendor/bin/php-coveralls --verbose --coverage_clover=build/logs/clover.xml
-
-  test:
-    strategy:
-      fail-fast: false
-      matrix:
-        operating-system: [ubuntu-latest, windows-latest, macos-latest]
-        php-versions: ['7.1', '7.2', '7.3', '7.4', '8.0']
-
-    runs-on: ${{ matrix.operating-system }}
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-versions }}
-          coverage: none
-
-      - name: Show composer version
-        run: composer -V
-
-      - name: Validate composer.json and composer.lock
-        run: composer validate
-
-      - name: Cache Composer packages
-        id: composer-cache
-        uses: actions/cache@v2
-        with:
-          path: vendor
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
-
-      - name: Install dependencies
-        if: steps.composer-cache.outputs.cache-hit != 'true'
-        run: composer install --prefer-dist --no-progress --no-suggest --ignore-platform-reqs
-
-      - name: phpunit
-        run: vendor/bin/phpunit --no-coverage
+            - name: Run tests
+              run: vendor-bin/tools/vendor/bin/phpunit
