@@ -45,6 +45,7 @@ jobs:
               run: vendor-bin/tools/vendor/bin/phpstan analyse
 
     test:
+        needs: lint
         strategy:
             fail-fast: false
             matrix:
@@ -70,6 +71,7 @@ jobs:
               run: vendor-bin/tools/vendor/bin/phpunit
 
     php8:
+        needs: lint
         strategy:
             fail-fast: false
             matrix:
