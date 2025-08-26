@@ -1,8 +1,8 @@
 {
-    "stdClass": {
-        "shared": true
-    },
-    "Xynha\\Tests\\Data\\E": {
-        "shared": true
-    }
+  "stdClass": {
+    "shared": true
+  },
+  "Tests\\Data\\E": {
+    "shared": true
+  }
 }

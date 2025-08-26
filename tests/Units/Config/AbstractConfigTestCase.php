@@ -7,42 +7,48 @@
  * @copyright 2020 Asis Pattisahusiwa
  * @license https://github.com/pattisahusiwa/dicontainer/blob/master/LICENSE Apache-2.0 License
  */
-namespace Xynha\Tests\Units\Config;
 
+namespace Tests\Units\Config;
+
+use Hinasila\DiContainer\DiContainer;
+use Hinasila\DiContainer\DiRuleList;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use Xynha\Container\DiContainer;
-use Xynha\Container\DiRuleList;
 
 abstract class AbstractConfigTestCase extends TestCase
 {
-
-    /** @var DiRuleList */
+    /**
+     * @var DiRuleList
+     */
     protected $rlist;
 
-    /** @var DiContainer */
+    /**
+     * @var DiContainer
+     */
     protected $dic;
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     protected $files = [];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $classname   = (new ReflectionClass(static::class))->getShortName();
-        $filename    = str_replace('Test', '', $classname);
-        $this->files = array_merge($this->files, [$filename . '.php']);
+        $filename    = \str_replace('Test', '', $classname);
+        $this->files = \array_merge($this->files, [$filename . '.php']);
         foreach ($this->files as $file) {
-            $path = DATA_DIR . '/' . $file;
-            if (file_exists($path) === true) {
+            $path = \DATA_DIR . '/' . $file;
+            if (\file_exists($path) === true) {
                 require_once $path;
             }
         }
 
-        $configPath = DATA_DIR . '/config/' . $filename . '.json';
+        $configPath = \DATA_DIR . '/config/' . $filename . '.json';
         $json       = [];
 
-        if (file_exists($configPath) === true) {
-            $json = json_decode((string) file_get_contents($configPath), true);
+        if (\file_exists($configPath) === true) {
+            $json = \json_decode((string) \file_get_contents($configPath), true);
         }
 
         $rlist       = new DiRuleList();

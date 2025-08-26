@@ -8,16 +8,15 @@
  * @license https://github.com/pattisahusiwa/dicontainer/blob/master/LICENSE Apache-2.0 License
  */
 
-use Xynha\Container\ContainerException;
-use Xynha\Tests\Data\ArrayInjected;
-use Xynha\Tests\Data\ClassInjected;
-use Xynha\Tests\Data\MixedArgument;
-use Xynha\Tests\Units\Config\AbstractConfigTestCase;
+use Hinasila\DiContainer\ContainerException;
+use Tests\Data\ArrayInjected;
+use Tests\Data\ClassInjected;
+use Tests\Data\MixedArgument;
+use Tests\Units\Config\AbstractConfigTestCase;
 
 final class ConstructParamsCallTest extends AbstractConfigTestCase
 {
-
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->files = ['ConstructParams.php'];
         parent::setUp();

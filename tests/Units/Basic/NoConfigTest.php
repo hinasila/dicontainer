@@ -7,22 +7,24 @@
  * @copyright 2020 Asis Pattisahusiwa
  * @license https://github.com/pattisahusiwa/dicontainer/blob/master/LICENSE Apache-2.0 License
  */
+
+use Hinasila\DiContainer\DiContainer;
+use Hinasila\DiContainer\DiRuleList;
 use PHPUnit\Framework\TestCase;
-use Xynha\Container\DiContainer;
-use Xynha\Container\DiRuleList;
-use Xynha\Tests\Data\ClassGraph;
-use Xynha\Tests\Data\ObjectAllowsNull;
-use Xynha\Tests\Data\ObjectDefaultValue;
-use Xynha\Tests\Data\ScalarAllowsNull;
-use Xynha\Tests\Data\ScalarTypeDefaultValue;
+use Tests\Data\ClassGraph;
+use Tests\Data\ObjectAllowsNull;
+use Tests\Data\ObjectDefaultValue;
+use Tests\Data\ScalarAllowsNull;
+use Tests\Data\ScalarTypeDefaultValue;
 
 final class NoConfigTest extends TestCase
 {
-
-    /** @var DiContainer */
+    /**
+     * @var DiContainer
+     */
     private $dic;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $rlist     = new DiRuleList();
         $this->dic = new DiContainer($rlist);
@@ -36,7 +38,7 @@ final class NoConfigTest extends TestCase
         $dt  = date_create();
 
         $this->assertInstanceOf(DateTime::class, $obj);
-        $this->assertSame($obj->format(DATE_W3C), $dt->format(DATE_W3C)); // @phpstan-ignore-line
+        $this->assertSame($obj->format(DATE_W3C), $dt->format(DATE_W3C));
     }
 
     public function testNoConstructor()
@@ -50,11 +52,11 @@ final class NoConfigTest extends TestCase
         $graph = $this->dic->get(ClassGraph::class);
 
         $this->assertInstanceOf(ClassGraph::class, $graph);
-        $this->assertInstanceOf('Xynha\Tests\Data\B', $graph->b);
-        $this->assertInstanceOf('Xynha\Tests\Data\C', $graph->b->c);
-        $this->assertInstanceOf('Xynha\Tests\Data\D', $graph->b->c->d);
-        $this->assertInstanceOf('Xynha\Tests\Data\E', $graph->b->c->e);
-        $this->assertInstanceOf('Xynha\Tests\Data\F', $graph->b->c->e->f);
+        $this->assertInstanceOf('Tests\Data\B', $graph->b);
+        $this->assertInstanceOf('Tests\Data\C', $graph->b->c);
+        $this->assertInstanceOf('Tests\Data\D', $graph->b->c->d);
+        $this->assertInstanceOf('Tests\Data\E', $graph->b->c->e);
+        $this->assertInstanceOf('Tests\Data\F', $graph->b->c->e->f);
     }
 
     public function testObjectAllowsNull()
@@ -78,7 +80,7 @@ final class NoConfigTest extends TestCase
         $obj = $this->dic->get(ScalarTypeDefaultValue::class);
 
         $this->assertInstanceOf(ScalarTypeDefaultValue::class, $obj);
-        $this->assertSame(false, $obj->bool);
+        $this->assertFalse($obj->bool);
         $this->assertSame('Default value', $obj->string);
         $this->assertSame(6, $obj->int);
         $this->assertSame(3.14, $obj->float);

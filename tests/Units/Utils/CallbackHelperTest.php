@@ -7,19 +7,21 @@
  * @copyright 2020 Asis Pattisahusiwa
  * @license https://github.com/pattisahusiwa/dicontainer/blob/master/LICENSE Apache-2.0 License
  */
+
+use Hinasila\DiContainer\CallbackHelper;
+use Hinasila\DiContainer\ContainerException;
+use Hinasila\DiContainer\DiContainer;
+use Hinasila\DiContainer\DiRuleList;
 use PHPUnit\Framework\TestCase;
-use Xynha\Container\CallbackHelper;
-use Xynha\Container\ContainerException;
-use Xynha\Container\DiContainer;
-use Xynha\Container\DiRuleList;
 
 final class CallbackHelperTest extends TestCase
 {
-
-    /** @var CallbackHelper */
+    /**
+     * @var CallbackHelper
+     */
     private $callback;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         require_once DATA_DIR . '/utils/callback.php';
 
@@ -123,7 +125,7 @@ final class CallbackHelperTest extends TestCase
 
     public function testClosureCallback()
     {
-        $closure = function (string $string, array $array): array {
+        $closure = static function (string $string, array $array): array {
             return ['Closure', $string, $array];
         };
 

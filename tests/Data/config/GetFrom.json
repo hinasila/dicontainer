@@ -1,37 +1,37 @@
 {
-    "Xynha\\Tests\\Data\\FactoryInterfaceFactory": {
-        "shared": true
-    },
-    "Xynha\\Tests\\Data\\FactoryInterface": {
-        "getFrom": [
-            [
-                "Xynha\\Tests\\Data\\FactoryInterfaceFactory",
-                "getInstance"
-            ],
-            [
-                "passed value from config"
-            ]
-        ]
-    },
-    "Xynha\\Tests\\Data\\MapFactory": {
-        "shared": true
-    },
-    "Xynha\\Tests\\Data\\ClassMapper": {
-        "getFrom": [
-            [
-                "Xynha\\Tests\\Data\\MapFactory",
-                "getMapper"
-            ],
-            []
-        ]
-    },
-    "Xynha\\Tests\\Data\\ClassGenerator": {
-        "getFrom": [
-            [
-                "Xynha\\Tests\\Data\\MapFactory",
-                "getGenerator"
-            ],
-            []
-        ]
-    }
+  "Tests\\Data\\FactoryInterfaceFactory": {
+    "shared": true
+  },
+  "Tests\\Data\\FactoryInterface": {
+    "getFrom": [
+      [
+        "Tests\\Data\\FactoryInterfaceFactory",
+        "getInstance"
+      ],
+      [
+        "passed value from config"
+      ]
+    ]
+  },
+  "Tests\\Data\\MapFactory": {
+    "shared": true
+  },
+  "Tests\\Data\\ClassMapper": {
+    "getFrom": [
+      [
+        "Tests\\Data\\MapFactory",
+        "getMapper"
+      ],
+      []
+    ]
+  },
+  "Tests\\Data\\ClassGenerator": {
+    "getFrom": [
+      [
+        "Tests\\Data\\MapFactory",
+        "getGenerator"
+      ],
+      []
+    ]
+  }
 }

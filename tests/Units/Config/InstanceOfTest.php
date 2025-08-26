@@ -7,17 +7,16 @@
  * @copyright 2020 Asis Pattisahusiwa
  * @license https://github.com/pattisahusiwa/dicontainer/blob/master/LICENSE Apache-2.0 License
  */
-use Xynha\Container\DiContainer;
-use Xynha\Container\DiRuleList;
-use Xynha\Tests\Data\ClassInstanceOf;
-use Xynha\Tests\Data\ImplementInterfaceInstanceOf;
-use Xynha\Tests\Data\InterfaceInstanceOf;
-use Xynha\Tests\Data\OverrideClassInstanceOf;
-use Xynha\Tests\Units\Config\AbstractConfigTestCase;
+use Hinasila\DiContainer\DiContainer;
+use Hinasila\DiContainer\DiRuleList;
+use Tests\Data\ClassInstanceOf;
+use Tests\Data\ImplementInterfaceInstanceOf;
+use Tests\Data\InterfaceInstanceOf;
+use Tests\Data\OverrideClassInstanceOf;
+use Tests\Units\Config\AbstractConfigTestCase;
 
 final class InstanceOfTest extends AbstractConfigTestCase
 {
-
     public function testOverrideInterface()
     {
         $obj = $this->dic->get(InterfaceInstanceOf::class);

@@ -1,0 +1,21 @@
+includes:
+    - phar://phpstan.phar/conf/bleedingEdge.neon
+    - phpstan-baseline.neon
+
+
+parameters:
+    level: 0
+    paths:
+        - src
+        - tests/Units
+
+    bootstrapFiles:
+        - tests/bootstrap.php
+
+    scanDirectories:
+        - tests/Data
+
+    ignoreErrors:
+
+    # Miscellaneous parameters
+    inferPrivatePropertyTypeFromConstructor: true

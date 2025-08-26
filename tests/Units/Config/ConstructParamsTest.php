@@ -8,16 +8,15 @@
  * @license https://github.com/pattisahusiwa/dicontainer/blob/master/LICENSE Apache-2.0 License
  */
 
-use Xynha\Container\ContainerException;
-use Xynha\Container\DiContainer;
-use Xynha\Tests\Data\ClassMixed;
-use Xynha\Tests\Data\ClassString;
-use Xynha\Tests\Units\Config\AbstractConfigTestCase;
+use Hinasila\DiContainer\ContainerException;
+use Hinasila\DiContainer\DiContainer;
+use Tests\Data\ClassMixed;
+use Tests\Data\ClassString;
+use Tests\Units\Config\AbstractConfigTestCase;
 
 final class ConstructParamsTest extends AbstractConfigTestCase
 {
-
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->files = ['BasicClass.php'];
         parent::setUp();
@@ -55,9 +54,9 @@ final class ConstructParamsTest extends AbstractConfigTestCase
     {
         $obj = $this->dic->get('$bool');
 
-        $this->assertSame(false, $obj->required);
-        $this->assertSame(true, $obj->optional);
-        $this->assertSame(null, $obj->null);
+        $this->assertFalse($obj->required);
+        $this->assertTrue($obj->optional);
+        $this->assertNull($obj->null);
     }
 
     public function testString()
@@ -66,7 +65,7 @@ final class ConstructParamsTest extends AbstractConfigTestCase
 
         $this->assertSame('Test string', $obj->required);
         $this->assertSame('Optional', $obj->optional);
-        $this->assertSame(null, $obj->null);
+        $this->assertNull($obj->null);
     }
 
     public function testInt()
@@ -75,7 +74,7 @@ final class ConstructParamsTest extends AbstractConfigTestCase
 
         $this->assertSame(2020, $obj->required);
         $this->assertSame(2019, $obj->optional);
-        $this->assertSame(null, $obj->null);
+        $this->assertNull($obj->null);
     }
 
     public function testFloat()
@@ -84,7 +83,7 @@ final class ConstructParamsTest extends AbstractConfigTestCase
 
         $this->assertSame(1e9, $obj->required);
         $this->assertSame(3.14, $obj->optional);
-        $this->assertSame(null, $obj->null);
+        $this->assertNull($obj->null);
     }
 
     public function testArray()
@@ -93,22 +92,22 @@ final class ConstructParamsTest extends AbstractConfigTestCase
 
         $this->assertSame([], $obj->required);
         $this->assertSame([3.14], $obj->optional);
-        $this->assertSame(null, $obj->null);
+        $this->assertNull($obj->null);
     }
 
     public function testScalarType()
     {
         $dt                      = new DateTime();
         $rule['constructParams'] = [
-                                    null, // $interface
-                                    null, // $class
-                                    null, // $bool
-                                    null, // $string
-                                    null, // $int
-                                    null, // $float
-                                    null, // $array
-                                    $dt, // $mixed
-                                   ];
+          null, // $interface
+          null, // $class
+          null, // $bool
+          null, // $string
+          null, // $int
+          null, // $float
+          null, // $array
+          $dt, // $mixed
+        ];
         $rlist                   = $this->rlist->addRule('$scalar_type_null', $rule);
         $dic                     = new DiContainer($rlist);
 
@@ -135,8 +134,8 @@ final class ConstructParamsTest extends AbstractConfigTestCase
     {
         $obj = $this->dic->get('$mixed');
 
-        $this->assertSame(null, $obj->required);
+        $this->assertNull($obj->required);
         $this->assertSame('Optional', $obj->optional);
-        $this->assertSame(null, $obj->null);
+        $this->assertNull($obj->null);
     }
 }

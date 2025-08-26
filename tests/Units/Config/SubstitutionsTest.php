@@ -7,22 +7,21 @@
  * @copyright 2020 Asis Pattisahusiwa
  * @license https://github.com/pattisahusiwa/dicontainer/blob/master/LICENSE Apache-2.0 License
  */
-use Xynha\Container\ContainerException;
-use Xynha\Container\DiContainer;
-use Xynha\Tests\Data\AllowsNullInterface;
-use Xynha\Tests\Data\ClassNoRule;
-use Xynha\Tests\Data\DefaultValueInterface;
-use Xynha\Tests\Data\DependInterfaceA;
-use Xynha\Tests\Data\DependInvalidSubsInterface;
-use Xynha\Tests\Data\ImplementInterfaceA;
-use Xynha\Tests\Data\ImplInvalidSubsInterface;
-use Xynha\Tests\Data\InterfaceNoRule;
-use Xynha\Tests\Data\InvalidSubsInterface;
-use Xynha\Tests\Units\Config\AbstractConfigTestCase;
+use Hinasila\DiContainer\ContainerException;
+use Hinasila\DiContainer\DiContainer;
+use Tests\Data\AllowsNullInterface;
+use Tests\Data\ClassNoRule;
+use Tests\Data\DefaultValueInterface;
+use Tests\Data\DependInterfaceA;
+use Tests\Data\DependInvalidSubsInterface;
+use Tests\Data\ImplementInterfaceA;
+use Tests\Data\ImplInvalidSubsInterface;
+use Tests\Data\InterfaceNoRule;
+use Tests\Data\InvalidSubsInterface;
+use Tests\Units\Config\AbstractConfigTestCase;
 
 final class SubstitutionsTest extends AbstractConfigTestCase
 {
-
     public function testMissingSubstitution()
     {
         $msg = sprintf(

@@ -8,7 +8,7 @@
 * @license https://github.com/pattisahusiwa/dicontainer/blob/master/LICENSE Apache-2.0 License
 */
 
-namespace Xynha\Container;
+namespace Hinasila\DiContainer;
 
 use Error;
 use Psr\Container\ContainerInterface;
@@ -17,20 +17,29 @@ use Throwable;
 
 final class DiContainer implements ContainerInterface
 {
-
-    /** @var DiParser */
+    /**
+     * @var DiParser
+     */
     private $parser;
 
-    /** @var CallbackHelper */
+    /**
+     * @var CallbackHelper
+     */
     private $callback;
 
-    /** @var DiRuleList */
+    /**
+     * @var DiRuleList
+     */
     private $list;
 
-    /** @var object[] */
+    /**
+     * @var object[]
+     */
     private $instances;
 
-    /** @var array<string,string> */
+    /**
+     * @var array<string,string>
+     */
     private $curKeys = [];
 
     public function __construct(DiRuleList $list)
@@ -42,13 +51,13 @@ final class DiContainer implements ContainerInterface
 
     public function has($id)
     {
-        return $this->list->hasRule($id) || class_exists($id);
+        return $this->list->hasRule($id) || \class_exists($id);
     }
 
     public function get($id)
     {
         if ($this->has($id) === false) {
-            throw new NotFoundException(sprintf('Class or rule %s does not exist', $id));
+            throw new NotFoundException(\sprintf('Class or rule %s does not exist', $id));
         }
 
         $rule = $this->list->getRule($id);
@@ -61,11 +70,11 @@ final class DiContainer implements ContainerInterface
         }
 
         $getFrom  = $rule->getFrom();
-        $callback = array_shift($getFrom);
-        $args     = array_shift($getFrom);
+        $callback = \array_shift($getFrom);
+        $args     = \array_shift($getFrom);
 
         $callback = $this->callback->toCallback($callback);
-        return call_user_func_array($callback, (array) $args);
+        return \call_user_func_array($callback, (array) $args);
     }
 
     /** @return object */
@@ -76,14 +85,14 @@ final class DiContainer implements ContainerInterface
         }
 
         if (
-            array_key_exists($rule->key(), $this->curKeys) === true
-            || in_array($rule->classname(), $this->curKeys) === true
+            \array_key_exists($rule->key(), $this->curKeys) === true
+            || \in_array($rule->classname(), $this->curKeys) === true
         ) {
             throw new ContainerException('Cyclic dependencies detected');
         }
 
         $classname = $rule->classname();
-        if (is_object($classname) === true) {
+        if (\is_object($classname) === true) {
             return $classname;
         }
         $this->curKeys[$rule->key()] = $classname;

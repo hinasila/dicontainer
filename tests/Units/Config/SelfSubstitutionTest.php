@@ -7,12 +7,11 @@
  * @copyright 2020 Asis Pattisahusiwa
  * @license https://github.com/pattisahusiwa/dicontainer/blob/master/LICENSE Apache-2.0 License
  */
-use Xynha\Container\DiContainer;
-use Xynha\Tests\Units\Config\AbstractConfigTestCase;
+use Hinasila\DiContainer\DiContainer;
+use Tests\Units\Config\AbstractConfigTestCase;
 
 final class SelfSubstitutionTest extends AbstractConfigTestCase
 {
-
     public function testGetDiContainerInstance()
     {
         $obj = $this->dic->get(DicDependant::class);

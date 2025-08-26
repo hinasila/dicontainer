@@ -7,7 +7,7 @@
  * @copyright 2020 Asis Pattisahusiwa
  * @license https://github.com/pattisahusiwa/dicontainer/blob/master/LICENSE Apache-2.0 License
  */
-namespace Xynha\Tests\Data;
+namespace Tests\Data;
 
 
 trait TraitTest {}

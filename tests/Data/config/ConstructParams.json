@@ -1,58 +1,58 @@
 {
-    "$no_constructParams": {
-        "instanceOf": "Xynha\\Tests\\Data\\ClassString"
-    },
-    "$invalidType": {
-        "instanceOf": "Xynha\\Tests\\Data\\ClassString",
-        "constructParams": [
-            true
-        ]
-    },
-    "Xynha\\Tests\\Data\\MixedArgument": {
-        "constructParams": [
-            "From config"
-        ]
-    },
-    "$bool": {
-        "instanceOf": "Xynha\\Tests\\Data\\ClassBool",
-        "constructParams": [
-            false
-        ]
-    },
-    "$string": {
-        "instanceOf": "Xynha\\Tests\\Data\\ClassString",
-        "constructParams": [
-            "Test string"
-        ]
-    },
-    "$int": {
-        "instanceOf": "Xynha\\Tests\\Data\\ClassInt",
-        "constructParams": [
-            2020
-        ]
-    },
-    "$float": {
-        "instanceOf": "Xynha\\Tests\\Data\\ClassFloat",
-        "constructParams": [
-            1e9
-        ]
-    },
-    "$array": {
-        "instanceOf": "Xynha\\Tests\\Data\\ClassArray",
-        "constructParams": [
-            []
-        ]
-    },
-    "$scalar_type_null": {
-        "instanceOf": "Xynha\\Tests\\Data\\ObjectScalar"
-    },
-    "$mixed_missing_value": {
-        "instanceOf": "Xynha\\Tests\\Data\\ClassMixed"
-    },
-    "$mixed": {
-        "instanceOf": "Xynha\\Tests\\Data\\ClassMixed",
-        "constructParams": [
-            null
-        ]
-    }
+  "$no_constructParams": {
+    "instanceOf": "Tests\\Data\\ClassString"
+  },
+  "$invalidType": {
+    "instanceOf": "Tests\\Data\\ClassString",
+    "constructParams": [
+      true
+    ]
+  },
+  "Tests\\Data\\MixedArgument": {
+    "constructParams": [
+      "From config"
+    ]
+  },
+  "$bool": {
+    "instanceOf": "Tests\\Data\\ClassBool",
+    "constructParams": [
+      false
+    ]
+  },
+  "$string": {
+    "instanceOf": "Tests\\Data\\ClassString",
+    "constructParams": [
+      "Test string"
+    ]
+  },
+  "$int": {
+    "instanceOf": "Tests\\Data\\ClassInt",
+    "constructParams": [
+      2020
+    ]
+  },
+  "$float": {
+    "instanceOf": "Tests\\Data\\ClassFloat",
+    "constructParams": [
+      1e9
+    ]
+  },
+  "$array": {
+    "instanceOf": "Tests\\Data\\ClassArray",
+    "constructParams": [
+      []
+    ]
+  },
+  "$scalar_type_null": {
+    "instanceOf": "Tests\\Data\\ObjectScalar"
+  },
+  "$mixed_missing_value": {
+    "instanceOf": "Tests\\Data\\ClassMixed"
+  },
+  "$mixed": {
+    "instanceOf": "Tests\\Data\\ClassMixed",
+    "constructParams": [
+      null
+    ]
+  }
 }

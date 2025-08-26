@@ -7,7 +7,8 @@
  * @copyright 2020 Asis Pattisahusiwa
  * @license https://github.com/pattisahusiwa/dicontainer/blob/master/LICENSE Apache-2.0 License
  */
-namespace Xynha\Container;
+
+namespace Hinasila\DiContainer;
 
 use ReflectionMethod;
 use ReflectionNamedType;
@@ -15,11 +16,14 @@ use ReflectionParameter;
 
 final class DiParser
 {
-
-    /** @var callable */
+    /**
+     * @var callable
+     */
     private $creator;
 
-    /** @var CallbackHelper */
+    /**
+     * @var CallbackHelper
+     */
     private $helper;
 
     public function __construct(callable $creator, CallbackHelper $helper)
@@ -71,11 +75,11 @@ final class DiParser
      */
     private function processNameType(ReflectionParameter $param, ReflectionNamedType $type, array $subs, array &$values)
     {
-        if (interface_exists($type->getName()) === true) {
+        if (\interface_exists($type->getName()) === true) {
             return $this->interfaceValue($param, $type, $subs, $values);
         }
 
-        if (class_exists($type->getName()) === true) {
+        if (\class_exists($type->getName()) === true) {
             return $this->classValue($param, $type, $values);
         }
 
@@ -95,8 +99,8 @@ final class DiParser
         } catch (NoValueException $exc) {
         }
 
-        if (array_key_exists($type->getName(), $subs) === true) {
-            return call_user_func_array($this->creator, [$subs[$type->getName()]]);
+        if (\array_key_exists($type->getName(), $subs) === true) {
+            return \call_user_func_array($this->creator, [$subs[$type->getName()]]);
         }
 
         if ($param->isDefaultValueAvailable() === true) {
@@ -108,12 +112,12 @@ final class DiParser
         }
 
         try {
-            return call_user_func_array($this->creator, [$type->getName()]);
+            return \call_user_func_array($this->creator, [$type->getName()]);
         } catch (NotFoundException $exc) {
-            $msg = sprintf(
+            $msg = \sprintf(
                 'Missing required substitutions %s passed to %s::%s()',
                 $type->getName(),
-                $param->getDeclaringClass()->getName(), // @phpstan-ignore-line
+                $param->getDeclaringClass()->getName(),
                 $param->getDeclaringFunction()->getName()
             );
             throw new ContainerException($msg, $exc->getCode(), $exc);
@@ -140,7 +144,7 @@ final class DiParser
             return null;
         }
 
-        return call_user_func_array($this->creator, [$type->getName()]);
+        return \call_user_func_array($this->creator, [$type->getName()]);
     }
 
     /**
@@ -163,10 +167,10 @@ final class DiParser
             return null;
         }
 
-        $msg = sprintf(
+        $msg = \sprintf(
             'Missing required argument $%s passed to %s::%s()',
             $param->getName(),
-            $param->getDeclaringClass()->getName(), // @phpstan-ignore-line
+            $param->getDeclaringClass()->getName(),
             $param->getDeclaringFunction()->getName()
         );
         throw new ContainerException($msg);
@@ -179,32 +183,32 @@ final class DiParser
      */
     private function scalarFromValue(ReflectionNamedType $type, array &$values, bool $allowsNull)
     {
-        if (count($values) <= 0) {
+        if (\count($values) <= 0) {
             throw new NoValueException();
         }
 
-        if (is_array($values[0]) === true) {
+        if (\is_array($values[0]) === true) {
             $call = (string) ($values[0][0] ?? '');
             switch ($call) {
                 case 'CALL::OBJECT':
                     throw new ContainerException('Require CALL::SCALAR or CALL::CONSTANT, CALL::OBJECT given');
                 case 'CALL::SCALAR':
-                    return $this->doCall(array_shift($values));
+                    return $this->doCall(\array_shift($values));
                 case 'CALL::CONSTANT':
-                    $const = array_shift($values);
-                    if (empty($const[1]) === true || is_string($const[1]) === false) {
+                    $const = \array_shift($values);
+                    if (empty($const[1]) === true || \is_string($const[1]) === false) {
                         throw new ContainerException('Invalid CALL::CONSTANT format');
                     }
-                    return constant($const[1]);
+                    return \constant($const[1]);
             }
         }
 
         if ($this->sameType($type->getName(), $values[0]) === true) {
-            return array_shift($values);
+            return \array_shift($values);
         }
 
         if ($values[0] === null && $allowsNull === true) {
-            return array_shift($values);
+            return \array_shift($values);
         }
 
         throw new NoValueException();
@@ -215,16 +219,16 @@ final class DiParser
     {
         switch ($type) {
             case 'bool':
-                return is_bool($value);
+                return \is_bool($value);
             case 'string':
-                return is_string($value);
+                return \is_string($value);
             case 'int':
-                return is_int($value);
+                return \is_int($value);
             case 'float':
-                return is_float($value);
+                return \is_float($value);
         }
 
-        return is_array($value);
+        return \is_array($value);
     }
 
     /**
@@ -234,22 +238,22 @@ final class DiParser
      */
     private function getObjectValue(string $className, array &$values, bool $allowsNull)
     {
-        if (count($values) <= 0) {
+        if (\count($values) <= 0) {
             throw new NoValueException();
         }
 
-        if (is_object($values[0]) === true && ($values[0] instanceof $className)) {
-            return array_shift($values);
+        if (\is_object($values[0]) === true && ($values[0] instanceof $className)) {
+            return \array_shift($values);
         }
 
         if ($values[0] === null && $allowsNull === true) {
-            return array_shift($values);
+            return \array_shift($values);
         }
 
         $call = (string) ($values[0][0] ?? '');
         switch ($call) {
             case 'CALL::OBJECT':
-                return $this->doCall(array_shift($values));
+                return $this->doCall(\array_shift($values));
             case 'CALL::SCALAR':
                 throw new ContainerException('Require CALL::OBJECT, CALL::SCALAR given');
             case 'CALL::CONSTANT':
@@ -266,12 +270,12 @@ final class DiParser
      */
     private function doCall(array $values)
     {
-        array_shift($values);
-        $callback = array_shift($values);
-        $args     = array_shift($values);
+        \array_shift($values);
+        $callback = \array_shift($values);
+        $args     = \array_shift($values);
 
         $callback = $this->helper->toCallback($callback);
-        return call_user_func_array($callback, (array) $args);
+        return \call_user_func_array($callback, (array) $args);
     }
 
     /**
@@ -281,31 +285,31 @@ final class DiParser
      */
     private function mixedValue(ReflectionParameter $param, array &$values)
     {
-        if (isset($values[0]) === true && is_array($values[0]) === true) {
+        if (isset($values[0]) === true && \is_array($values[0]) === true) {
             $call = (string) ($values[0][0] ?? '');
             switch ($call) {
                 case 'CALL::OBJECT':
-                    return $this->doCall(array_shift($values));
+                    return $this->doCall(\array_shift($values));
                 case 'CALL::SCALAR':
-                    return $this->doCall(array_shift($values));
+                    return $this->doCall(\array_shift($values));
                 case 'CALL::CONSTANT':
-                    $const = array_shift($values);
-                    if (empty($const[1]) === true || is_string($const[1]) === false) {
+                    $const = \array_shift($values);
+                    if (empty($const[1]) === true || \is_string($const[1]) === false) {
                         throw new ContainerException('Invalid CALL::CONSTANT format');
                     }
-                    return constant($const[1]);
+                    return \constant($const[1]);
             }
         }
 
-        if (count($values) > 0) {
-            return array_shift($values);
+        if (\count($values) > 0) {
+            return \array_shift($values);
         }
 
         if ($param->isOptional() === false) {
-            $msg = sprintf(
+            $msg = \sprintf(
                 'Missing required argument $%s passed to %s::%s()',
                 $param->getName(),
-                $param->getDeclaringClass()->getName(), // @phpstan-ignore-line
+                $param->getDeclaringClass()->getName(),
                 $param->getDeclaringFunction()->getName()
             );
             throw new ContainerException($msg);

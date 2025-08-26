@@ -7,20 +7,19 @@
  * @copyright 2020 Asis Pattisahusiwa
  * @license https://github.com/pattisahusiwa/dicontainer/blob/master/LICENSE Apache-2.0 License
  */
-use Xynha\Container\ContainerException;
-use Xynha\Container\DiContainer;
-use Xynha\Container\DiRuleList;
-use Xynha\Tests\Data\FactoryInterface;
-use Xynha\Tests\Data\FactoryInterfaceDep;
-use Xynha\Tests\Data\FactoryInterfaceImpl;
-use Xynha\Tests\Data\GeneratorDep;
-use Xynha\Tests\Data\MapFactory;
-use Xynha\Tests\Data\MapperDep;
-use Xynha\Tests\Units\Config\AbstractConfigTestCase;
+use Hinasila\DiContainer\ContainerException;
+use Hinasila\DiContainer\DiContainer;
+use Hinasila\DiContainer\DiRuleList;
+use Tests\Data\FactoryInterface;
+use Tests\Data\FactoryInterfaceDep;
+use Tests\Data\FactoryInterfaceImpl;
+use Tests\Data\GeneratorDep;
+use Tests\Data\MapFactory;
+use Tests\Data\MapperDep;
+use Tests\Units\Config\AbstractConfigTestCase;
 
 final class GetFromTest extends AbstractConfigTestCase
 {
-
     public function testGetFromIsNotCallable()
     {
         $this->expectException(ContainerException::class);
@@ -73,7 +72,7 @@ final class GetFromTest extends AbstractConfigTestCase
 
     public function testOverrideGetFrom()
     {
-        $closure         = function (string $value): FactoryInterface {
+        $closure         = static function (string $value): FactoryInterface {
             $factory = new FactoryInterfaceImpl('From closure');
             $factory->setValue($value);
             return $factory;

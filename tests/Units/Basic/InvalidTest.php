@@ -7,24 +7,26 @@
  * @copyright 2020 Asis Pattisahusiwa
  * @license https://github.com/pattisahusiwa/dicontainer/blob/master/LICENSE Apache-2.0 License
  */
+
+use Hinasila\DiContainer\ContainerException;
+use Hinasila\DiContainer\DiContainer;
+use Hinasila\DiContainer\DiRuleList;
+use Hinasila\DiContainer\NotFoundException;
 use PHPUnit\Framework\TestCase;
-use Xynha\Container\ContainerException;
-use Xynha\Container\DiContainer;
-use Xynha\Container\DiRuleList;
-use Xynha\Container\NotFoundException;
-use Xynha\Tests\Data\AbstractClass;
-use Xynha\Tests\Data\CyclicA;
-use Xynha\Tests\Data\PrivateClass;
-use Xynha\Tests\Data\ProtectedClass;
-use Xynha\Tests\Data\TraitTest;
+use Tests\Data\AbstractClass;
+use Tests\Data\CyclicA;
+use Tests\Data\PrivateClass;
+use Tests\Data\ProtectedClass;
+use Tests\Data\TraitTest;
 
 final class InvalidTest extends TestCase
 {
-
-    /** @var DiContainer */
+    /**
+     * @var DiContainer
+     */
     private $dic;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $rlist     = new DiRuleList();
         $this->dic = new DiContainer($rlist);
