@@ -1,9 +1,7 @@
 /vendor/
-/.phive/
-/tools/
-/generated/
+/vendor-bin/*/vendor
 
-composer.lock
+/composer.lock
 phpcs.xml
 phpstan.neon
 phpunit.xml

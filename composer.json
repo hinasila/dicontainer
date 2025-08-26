@@ -1,48 +1,55 @@
 {
-    "name": "xynha/dicontainer",
-    "description": "PSR-11 compliant PHP dependency injection container",
-    "keywords": [
-        "psr-11",
-        "dependency-injection",
-        "container",
-        "container-interop",
-        "di"
-    ],
-    "type": "library",
-    "license": "Apache-2.0",
-    "authors": [
-        {
-            "name": "Asis Pattisahusiwa",
-            "email": "asis.pattisahusiwa@gmail.com"
-        }
-    ],
-    "homepage": "https://github.com/pattisahusiwa/dicontainer",
-    "support": {
-        "issues": "https://github.com/pattisahusiwa/dicontainer/issues"
-    },
-    "minimum-stability": "stable",
-    "prefer-stable": true,
-    "config": {
-        "preferred-install": "dist",
-        "sort-packages": true
-    },
-    "autoload": {
-        "psr-4": {
-            "Xynha\\Container\\": "src"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Xynha\\Tests\\": "tests"
-        }
-    },
-    "require": {
-        "php": "^7.1 || ^8.0",
-        "psr/container": "^1.0"
-    },
-    "require-dev": {
-        "pattisahusiwa/coding-standard": "~0.3",
-        "phpstan/phpstan-phpunit": "~0.12.16",
-        "phpunit/phpunit": "^7.0"
+  "name": "hinasila/dicontainer",
+  "description": "PSR-11 compliant PHP dependency injection container",
+  "keywords": [
+    "psr-11",
+    "dependency-injection",
+    "container",
+    "container-interop",
+    "di"
+  ],
+  "type": "library",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "Asis Pattisahusiwa",
+      "email": "asis.pattisahusiwa@gmail.com"
     }
+  ],
+  "homepage": "https://github.com/hinasila/dicontainer",
+  "support": {
+    "issues": "https://github.com/hinasila/dicontainer/issues"
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "config": {
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "allow-plugins": {
+      "bamarni/composer-bin-plugin": true
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "Xynha\\Container\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Xynha\\Tests\\": "tests"
+    }
+  },
+  "require": {
+    "php": "^7.2 || ^8.0",
+    "psr/container": "^1.0"
+  },
+  "require-dev": {
+    "bamarni/composer-bin-plugin": "^1.8"
+  },
+  "extra": {
+    "bamarni-bin": {
+      "bin-links": false,
+      "forward-command": true
+    }
+  }
 }
