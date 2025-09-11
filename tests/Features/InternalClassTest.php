@@ -10,7 +10,7 @@ final class InternalClassTest extends DicTestCase
     /**
      * @group xdebug
      */
-    public function test_without_constructor()
+    public function test_without_constructor(): void
     {
         $obj = $this->dic->get(DateTime::class);
         $dt  = \date_create();

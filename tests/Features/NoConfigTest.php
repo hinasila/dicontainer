@@ -14,7 +14,7 @@ final class NoConfigTest extends DicTestCase
     /**
      * @group xdebug
      */
-    public function test_object_tree()
+    public function test_object_tree(): void
     {
         $graph = $this->dic->get(ClassGraph::class);
 
@@ -26,7 +26,7 @@ final class NoConfigTest extends DicTestCase
         $this->assertInstanceOf('Tests\Fixtures\NoConfig\F', $graph->b->c->e->f);
     }
 
-    public function test_nullable_object()
+    public function test_nullable_object(): void
     {
         $obj = $this->dic->get(NullableObject::class);
 
@@ -34,7 +34,7 @@ final class NoConfigTest extends DicTestCase
         $this->assertNull($obj->std);
     }
 
-    public function test_object_default_value()
+    public function test_object_default_value(): void
     {
         $obj = $this->dic->get(ObjectDefaultValue::class);
 
@@ -42,7 +42,7 @@ final class NoConfigTest extends DicTestCase
         $this->assertNull($obj->obj);
     }
 
-    public function test_scalar_default_value()
+    public function test_scalar_default_value(): void
     {
         $obj = $this->dic->get(ScalarDefaultValue::class);
 
@@ -58,7 +58,7 @@ final class NoConfigTest extends DicTestCase
         $this->assertSame([3.14, 3.8], $obj->floatArray);
     }
 
-    public function test_scalar_nullable()
+    public function test_scalar_nullable(): void
     {
         $obj = $this->dic->get(ScalarNullable::class);
 

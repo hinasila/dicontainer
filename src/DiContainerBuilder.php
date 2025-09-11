@@ -2,6 +2,8 @@
 
 namespace Hinasila\DiContainer;
 
+use Psr\Container\ContainerInterface;
+
 final class DiContainerBuilder
 {
     public function __construct()
@@ -9,7 +11,7 @@ final class DiContainerBuilder
         // Do nothing
     }
 
-    public function createContainer(): DiContainer
+    public function createContainer(): ContainerInterface
     {
         return new DiContainer();
     }

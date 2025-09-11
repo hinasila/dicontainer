@@ -8,7 +8,7 @@ use Tests\Fixtures\Cyclic\CyclicA;
 
 final class CyclicTest extends DicTestCase
 {
-    public function test_cyclic_dependencies()
+    public function test_cyclic_dependencies(): void
     {
         $this->expectException(ContainerException::class);
         $this->expectExceptionMessage('Cyclic dependencies detected');
