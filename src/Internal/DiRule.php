@@ -1,7 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Hinasila\DiContainer;
+namespace Hinasila\DiContainer\Internal;
 
+/**
+ * @internal
+ */
 final class DiRule
 {
     /**

@@ -3,7 +3,7 @@
 
   <testsuites>
     <testsuite name="alltest">
-      <directory suffix="Test.php">tests/Units</directory>
+      <directory suffix="Test.php">tests/Features</directory>
     </testsuite>
   </testsuites>
 

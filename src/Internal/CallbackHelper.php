@@ -1,11 +1,15 @@
 <?php declare(strict_types=1);
 
-namespace Hinasila\DiContainer;
+namespace Hinasila\DiContainer\Internal;
 
+use Hinasila\DiContainer\Exception\ContainerException;
 use Psr\Container\ContainerInterface;
 use ReflectionException;
 use ReflectionMethod;
 
+/**
+ * @internal
+ */
 final class CallbackHelper
 {
     private $dic;

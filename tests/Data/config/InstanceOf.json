@@ -1,8 +1,0 @@
-{
-  "Tests\\Data\\InterfaceInstanceOf": {
-    "instanceOf": "Tests\\Data\\ImplementInterfaceInstanceOf"
-  },
-  "Tests\\Data\\ClassInstanceOf": {
-    "instanceOf": "Tests\\Data\\OverrideClassInstanceOf"
-  }
-}

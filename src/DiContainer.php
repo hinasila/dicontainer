@@ -3,53 +3,60 @@
 namespace Hinasila\DiContainer;
 
 use Error;
+use Hinasila\DiContainer\Exception\ContainerException;
+use Hinasila\DiContainer\Exception\NotFoundException;
+use Hinasila\DiContainer\Internal\CallbackHelper;
+use Hinasila\DiContainer\Internal\DiParser;
+use Hinasila\DiContainer\Internal\DiRule;
+use Hinasila\DiContainer\Internal\DiRuleList;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use Throwable;
 
+/**
+ * @template T as object
+ */
 final class DiContainer implements ContainerInterface
 {
-    /**
-     * @var DiParser
-     */
-    private $parser;
+    private $list;
 
-    /**
-     * @var CallbackHelper
-     */
     private $callback;
 
-    /**
-     * @var DiRuleList
-     */
-    private $list;
+    private $parser;
 
     /**
      * @var object[]
      */
-    private $instances;
+    private $instances = [];
 
     /**
      * @var array<string,string>
      */
     private $curKeys = [];
 
-    public function __construct(DiRuleList $list)
+    public function __construct(?DiRuleList $list = null)
     {
-        $this->list     = $list;
+        $this->list     = $list ?? new DiRuleList();
         $this->callback = new CallbackHelper($this);
         $this->parser   = new DiParser([$this, 'get'], $this->callback);
     }
 
-    public function has($id)
+    /**
+     * @param class-string<T> $id
+     */
+    public function has(string $id): bool
     {
         return $this->list->hasRule($id) || \class_exists($id);
     }
 
-    public function get($id)
+    /**
+     * @param class-string<T> $id
+     * return T
+     */
+    public function get(string $id)
     {
         if ($this->has($id) === false) {
-            throw new NotFoundException(\sprintf('Class or rule %s does not exist', $id));
+            throw new NotFoundException(\sprintf('Service "%s" does not exist', $id));
         }
 
         $rule = $this->list->getRule($id);
@@ -69,7 +76,9 @@ final class DiContainer implements ContainerInterface
         return \call_user_func_array($callback, (array) $args);
     }
 
-    /** @return object */
+    /**
+     * @return T
+     */
     private function getInstance(DiRule $rule)
     {
         if (isset($this->instances[$rule->key()]) === true) {
@@ -104,7 +113,9 @@ final class DiContainer implements ContainerInterface
         return $object;
     }
 
-    /** @return object */
+    /**
+     * @return object
+     */
     private function createObject(DiRule $rule)
     {
         $ref = new ReflectionClass($rule->classname());

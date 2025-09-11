@@ -1,11 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace Hinasila\DiContainer;
+namespace Hinasila\DiContainer\Internal;
 
+use Hinasila\DiContainer\Exception\ContainerException;
+use Hinasila\DiContainer\Exception\NotFoundException;
+use Hinasila\DiContainer\NoValueException;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
 
+/**
+ * @internal
+ */
 final class DiParser
 {
     /**

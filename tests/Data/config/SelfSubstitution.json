@@ -1,5 +1,0 @@
-{
-  "Psr\\Container\\ContainerInterface": {
-    "instanceOf": "Hinasila\\DiContainer\\DiContainer"
-  }
-}
