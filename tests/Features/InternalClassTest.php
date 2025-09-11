@@ -5,9 +5,12 @@ namespace Tests\Features;
 use DateTime;
 use Tests\DicTestCase;
 
-final class BasicTest extends DicTestCase
+final class InternalClassTest extends DicTestCase
 {
-    public function testInternalClass()
+    /**
+     * @group xdebug
+     */
+    public function test_without_constructor()
     {
         $obj = $this->dic->get(DateTime::class);
         $dt  = \date_create();

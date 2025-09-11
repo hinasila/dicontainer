@@ -8,9 +8,8 @@
   <file>src</file>
   <file>tests</file>
 
+  <exclude-pattern>tests/Fixtures</exclude-pattern>
   <exclude-pattern>vendor</exclude-pattern>
-  <exclude-pattern>tests/Data</exclude-pattern>
-  <exclude-pattern>docs</exclude-pattern>
 
   <rule ref="ptscs">
     <exclude name="PSR12.Files.FileHeader.IncorrectOrder"/>
