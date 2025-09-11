@@ -1,8 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Hinasila\DiContainer;
-
-use Hinasila\DiContainer\Exception\ContainerException;
+namespace Hinasila\DiContainer\Exception;
 
 final class NoValueException extends ContainerException
 {

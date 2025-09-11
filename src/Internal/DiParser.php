@@ -4,7 +4,7 @@ namespace Hinasila\DiContainer\Internal;
 
 use Hinasila\DiContainer\Exception\ContainerException;
 use Hinasila\DiContainer\Exception\NotFoundException;
-use Hinasila\DiContainer\NoValueException;
+use Hinasila\DiContainer\Exception\NoValueException;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
