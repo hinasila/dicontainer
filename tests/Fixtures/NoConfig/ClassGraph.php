@@ -2,6 +2,7 @@
 
 namespace Tests\Fixtures\NoConfig;
 
+use stdClass;
 
 class ClassGraph
 {
@@ -38,9 +39,11 @@ class D{}
 class E
 {
     public $f;
-    public function __construct(F $f)
+    public $std;
+    public function __construct(F $f, stdClass $std)
     {
         $this->f = $f;
+        $this->std;
     }
 }
 

@@ -68,11 +68,11 @@ final class DiContainer implements ContainerInterface
             return clone $this;
         }
 
-        if (empty($rule->getFrom()) === true) {
+        $getFrom = $rule->getFrom();
+        if ($getFrom === []) {
             return $this->getInstance($rule);
         }
 
-        $getFrom  = $rule->getFrom();
         $callback = \array_shift($getFrom);
         $args     = \array_shift($getFrom);
 
