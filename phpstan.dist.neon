@@ -13,7 +13,7 @@ parameters:
         - tests/bootstrap.php
 
     scanDirectories:
-        - tests/_fixtures
+        # - tests/_fixtures
 
     ignoreErrors:
 
