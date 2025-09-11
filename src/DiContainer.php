@@ -36,9 +36,13 @@ final class DiContainer implements ContainerInterface
 
     public function __construct(?DiRuleList $list = null)
     {
-        $this->list     = $list ?? new DiRuleList();
         $this->callback = new CallbackHelper($this);
         $this->parser   = new DiParser([$this, 'get'], $this->callback);
+
+        $list       = $list ?? new DiRuleList();
+        $this->list = $list->addRule(ContainerInterface::class, [
+          'instanceOf' => DiContainer::class,
+        ]);
     }
 
     /**
