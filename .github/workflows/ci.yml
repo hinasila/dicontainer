@@ -28,15 +28,8 @@ jobs:
             - name: Validate composer.json and composer.lock
               run: composer validate
 
-            - name: Install dependencies
-              if: steps.composer-cache.outputs.cache-hit != 'true'
-              run: composer install --prefer-dist --no-progress --no-suggest
-
-            - name: Install project deps
-              run: composer install --no-progress
-
-            - name: Install tools
-              run: composer bin tools install --no-progress
+            - name: Install deps
+              run: composer install --no-progress --no-suggest
 
             - name: Check style
               run: vendor-bin/tools/vendor/bin/phpcs
@@ -61,11 +54,8 @@ jobs:
                   php-version: ${{ matrix.php }}
                   coverage: none
 
-            - name: Install project deps
-              run: composer install --no-progress
-
-            - name: Install tools
-              run: composer bin tools install --no-progress
+            - name: Install deps
+              run: composer install --no-progress --no-suggest
 
             - name: Run tests
               run: vendor-bin/tools/vendor/bin/phpunit
@@ -87,11 +77,8 @@ jobs:
                   php-version: ${{ matrix.php }}
                   coverage: none
 
-            - name: Install project deps
-              run: composer install --no-progress
-
-            - name: Install tools
-              run: composer bin tools install --no-progress
+            - name: Install deps
+              run: composer install --no-progress --no-suggest
 
             - name: Run tests
               run: vendor-bin/tools/vendor/bin/phpunit
