@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Features;
+namespace Tests\Features\Basic;
 
 use ArrayAccess;
 use Hinasila\DiContainer\Exception\ContainerException;
