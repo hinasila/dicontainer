@@ -1,0 +1,113 @@
+<?php declare(strict_types=1);
+
+namespace Tests\Features\WithRule;
+
+use Hinasila\DiContainer\DiContainer;
+use Hinasila\DiContainer\DiContainerBuilder;
+use Hinasila\DiContainer\Exception\ContainerException;
+use PHPUnit\Framework\TestCase;
+use Tests\Fixtures\BindParam\ClassArray;
+use Tests\Fixtures\BindParam\ClassBool;
+use Tests\Fixtures\BindParam\ClassFloat;
+use Tests\Fixtures\BindParam\ClassInt;
+use Tests\Fixtures\BindParam\ClassString;
+
+final class BindParamTest extends TestCase
+{
+    public function test_required_param(): void
+    {
+        $this->expectException(ContainerException::class);
+        $this->expectExceptionMessage(
+            \sprintf(
+                'Missing required argument $%s passed to %s::__construct()',
+                'required',
+                ClassString::class
+            )
+        );
+
+        $dic = new DiContainer();
+        $dic->get(ClassString::class);
+    }
+
+    public function test_invalid_type(): void
+    {
+        $this->expectException(ContainerException::class);
+        $this->expectExceptionMessage(
+            \sprintf(
+                'Missing required argument $%s passed to %s::__construct()',
+                'required',
+                ClassString::class
+            )
+        );
+
+        $dic = DiContainerBuilder::init()
+            ->bindParams(ClassString::class, [123])
+            ->createContainer();
+        $dic->get(ClassString::class);
+    }
+
+    public function test_string(): void
+    {
+        $dic = DiContainerBuilder::init()
+            ->bindParams(ClassString::class, ['123', null])
+            ->createContainer();
+
+        $instance = $dic->get(ClassString::class);
+
+        $this->assertSame('123', $instance->required);
+        $this->assertSame('Optional', $instance->optional);
+        $this->assertNull($instance->null);
+    }
+
+    public function test_bool(): void
+    {
+        $dic = DiContainerBuilder::init()
+            ->bindParams(ClassBool::class, [true])
+            ->createContainer();
+
+        $instance = $dic->get(ClassBool::class);
+
+        $this->assertTrue($instance->required);
+        $this->assertTrue($instance->optional);
+        $this->assertNull($instance->null);
+    }
+
+    public function test_int(): void
+    {
+        $dic = DiContainerBuilder::init()
+            ->bindParams(ClassInt::class, [2025])
+            ->createContainer();
+
+        $instance = $dic->get(ClassInt::class);
+
+        $this->assertSame(2025, $instance->required);
+        $this->assertSame(2019, $instance->optional);
+        $this->assertNull($instance->null);
+    }
+
+    public function test_float(): void
+    {
+        $dic = DiContainerBuilder::init()
+            ->bindParams(ClassFloat::class, [1e9])
+            ->createContainer();
+
+        $instance = $dic->get(ClassFloat::class);
+
+        $this->assertSame(1e9, $instance->required);
+        $this->assertSame(3.14, $instance->optional);
+        $this->assertNull($instance->null);
+    }
+
+    public function test_array(): void
+    {
+        $dic = DiContainerBuilder::init()
+            ->bindParams(ClassArray::class, [[1e9]])
+            ->createContainer();
+
+        $instance = $dic->get(ClassArray::class);
+
+        $this->assertSame([1e9], $instance->required);
+        $this->assertSame([3.14], $instance->optional);
+        $this->assertNull($instance->null);
+    }
+}

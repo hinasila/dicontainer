@@ -40,6 +40,15 @@ final class DiContainerBuilder
         return $this;
     }
 
+    /**
+     * @param mixed[] $params
+     */
+    public function bindParams(string $service, array $params): self
+    {
+        $this->rules = $this->rules->addRule($service, ['constructParams' => $params]);
+        return $this;
+    }
+
     public static function init(): self
     {
         return new self();
