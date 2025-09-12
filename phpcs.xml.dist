@@ -23,4 +23,14 @@
     <exclude-pattern>tests</exclude-pattern>
   </rule>
 
+    <!-- Forbid @group annotation -->
+    <rule ref="SlevomatCodingStandard.Commenting.ForbiddenAnnotations">
+        <properties>
+            <property name="forbiddenAnnotations" type="array">
+                <element value="@group" />
+            </property>
+        </properties>
+        <severity phpcbf-only="true">0</severity>
+    </rule>
+
 </ruleset>

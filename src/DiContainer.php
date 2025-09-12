@@ -13,9 +13,6 @@ use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use Throwable;
 
-/**
- * @template T as object
- */
 final class DiContainer implements ContainerInterface
 {
     private $list;
@@ -46,7 +43,7 @@ final class DiContainer implements ContainerInterface
     }
 
     /**
-     * @param class-string<T> $id
+     * @param class-string $id
      */
     public function has(string $id): bool
     {
@@ -54,8 +51,10 @@ final class DiContainer implements ContainerInterface
     }
 
     /**
+     * @template T of object
+     *
      * @param class-string<T> $id
-     * return T
+     * @return T
      */
     public function get(string $id)
     {
@@ -81,7 +80,7 @@ final class DiContainer implements ContainerInterface
     }
 
     /**
-     * @return T
+     * @return object
      */
     private function getInstance(DiRule $rule)
     {

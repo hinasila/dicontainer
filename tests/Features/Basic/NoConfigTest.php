@@ -11,14 +11,11 @@ use Tests\Fixtures\NoConfig\ScalarNullable;
 
 final class NoConfigTest extends DicTestCase
 {
-    /**
-     * @group xdebug
-     */
     public function test_object_tree(): void
     {
         $graph = $this->dic->get(ClassGraph::class);
 
-        $this->assertInstanceOf(ClassGraph::class, $graph);
+        $this->assertInstanceOf(ClassGraph::class, $graph); // @phpstan-ignore method.alreadyNarrowedType
         $this->assertInstanceOf('Tests\Fixtures\NoConfig\B', $graph->b);
         $this->assertInstanceOf('Tests\Fixtures\NoConfig\C', $graph->b->c);
         $this->assertInstanceOf('Tests\Fixtures\NoConfig\D', $graph->b->c->d);
@@ -30,7 +27,7 @@ final class NoConfigTest extends DicTestCase
     {
         $obj = $this->dic->get(NullableObject::class);
 
-        $this->assertInstanceOf(NullableObject::class, $obj);
+        $this->assertInstanceOf(NullableObject::class, $obj); // @phpstan-ignore method.alreadyNarrowedType
         $this->assertNull($obj->std);
     }
 
@@ -38,7 +35,7 @@ final class NoConfigTest extends DicTestCase
     {
         $obj = $this->dic->get(ObjectDefaultValue::class);
 
-        $this->assertInstanceOf(ObjectDefaultValue::class, $obj);
+        $this->assertInstanceOf(ObjectDefaultValue::class, $obj); // @phpstan-ignore method.alreadyNarrowedType
         $this->assertNull($obj->obj);
     }
 
@@ -46,7 +43,7 @@ final class NoConfigTest extends DicTestCase
     {
         $obj = $this->dic->get(ScalarDefaultValue::class);
 
-        $this->assertInstanceOf(ScalarDefaultValue::class, $obj);
+        $this->assertInstanceOf(ScalarDefaultValue::class, $obj); // @phpstan-ignore method.alreadyNarrowedType
         $this->assertFalse($obj->bool);
         $this->assertSame('Default value', $obj->string);
         $this->assertSame(6, $obj->int);
@@ -62,7 +59,7 @@ final class NoConfigTest extends DicTestCase
     {
         $obj = $this->dic->get(ScalarNullable::class);
 
-        $this->assertInstanceOf(ScalarNullable::class, $obj);
+        $this->assertInstanceOf(ScalarNullable::class, $obj); // @phpstan-ignore method.alreadyNarrowedType
         $this->assertNull($obj->bool);
         $this->assertNull($obj->string);
         $this->assertNull($obj->int);
