@@ -34,6 +34,12 @@ final class DiContainerBuilder
         return $this;
     }
 
+    public function bind(string $interface, string $class): self
+    {
+        $this->rules = $this->rules->addRule($interface, ['instanceOf' => $class]);
+        return $this;
+    }
+
     public static function init(): self
     {
         return new self();
