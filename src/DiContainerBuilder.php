@@ -24,19 +24,19 @@ final class DiContainerBuilder
 
     public function asTransient(string $key): self
     {
-        $this->rules = $this->rules->addRule($key, ['shared' => false]);
+        $this->rules->addRule($key, ['shared' => false]);
         return $this;
     }
 
     public function asSingleton(string $key): self
     {
-        $this->rules = $this->rules->addRule($key, ['shared' => true]);
+        $this->rules->addRule($key, ['shared' => true]);
         return $this;
     }
 
     public function bind(string $interface, string $class): self
     {
-        $this->rules = $this->rules->addRule($interface, ['instanceOf' => $class]);
+        $this->rules->addRule($interface, ['instanceOf' => $class]);
         return $this;
     }
 
@@ -45,7 +45,7 @@ final class DiContainerBuilder
      */
     public function bindParams(string $service, array $params): self
     {
-        $this->rules = $this->rules->addRule($service, ['constructParams' => $params]);
+        $this->rules->addRule($service, ['constructParams' => $params]);
         return $this;
     }
 
