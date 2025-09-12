@@ -31,12 +31,25 @@ final class SubstitutionTest extends TestCase
     public function test_invalid_substitution(): void
     {
         $this->expectException(ContainerException::class);
-        $this->expectExceptionMessage(\sprintf(
-            'Argument 1 passed to %s::__construct() must implement interface %s, instance of %s given',
-            BasicClass::class,
-            BasicInterface::class,
-            stdClass::class
-        ));
+
+        if (\PHP_VERSION_ID <= 70400) {
+            $this->expectExceptionMessage(\sprintf(
+                'Argument 1 passed to %s::__construct() must implement interface %s, instance of %s given',
+                BasicClass::class,
+                BasicInterface::class,
+                stdClass::class
+            ));
+        }
+
+        if (\PHP_VERSION_ID >= 80000) {
+            $this->expectExceptionMessage(\sprintf(
+                '%s::__construct(): Argument #1 ($obj) must be of type %s, %s given',
+                BasicClass::class,
+                BasicInterface::class,
+                stdClass::class
+            ));
+        }
+
 
         $dic = DiContainerBuilder::init()
             ->bind(BasicInterface::class, stdClass::class)
