@@ -43,7 +43,7 @@ class E
     public function __construct(F $f, stdClass $std)
     {
         $this->f = $f;
-        $this->std;
+        $this->std = $std;
     }
 }
 

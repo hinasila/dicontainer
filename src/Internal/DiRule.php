@@ -39,7 +39,7 @@ final class DiRule
 
     public function isShared(): bool
     {
-        return (bool) ($this->rules['shared'] ?? false);
+        return (bool) ($this->rules['shared'] ?? true);
     }
 
     /** @return array<int,mixed> */

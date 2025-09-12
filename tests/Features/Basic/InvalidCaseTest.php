@@ -33,7 +33,7 @@ final class InvalidCaseTest extends DicTestCase
     public function test_create_abstract_class(): void
     {
         $this->expectException(ContainerException::class);
-        $this->expectExceptionMessage(\sprintf('Cannot instantiate abstract class ' . AbstractClass::class));
+        $this->expectExceptionMessage('Cannot instantiate abstract class ' . AbstractClass::class);
 
         $this->dic->get(AbstractClass::class);
     }

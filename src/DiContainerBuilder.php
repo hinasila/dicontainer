@@ -22,7 +22,13 @@ final class DiContainerBuilder
         return new DiContainer($this->rules);
     }
 
-    public function configureSingleton(string $key): self
+    public function asTransient(string $key): self
+    {
+        $this->rules = $this->rules->addRule($key, ['shared' => false]);
+        return $this;
+    }
+
+    public function asSingleton(string $key): self
     {
         $this->rules = $this->rules->addRule($key, ['shared' => true]);
         return $this;
