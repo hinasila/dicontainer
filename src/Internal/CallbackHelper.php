@@ -25,7 +25,7 @@ final class CallbackHelper
         try {
             $ref = $this->getReflection($callback);
 
-            if ($ref === null) {
+            if (!$ref instanceof ReflectionMethod) {
                 return $callback;
             }
 
@@ -40,7 +40,7 @@ final class CallbackHelper
         } catch (ReflectionException $exc) {
         }
 
-        if (\is_callable($callback) === true) {
+        if (\is_callable($callback)) {
             return $callback;
         }
 
@@ -50,13 +50,12 @@ final class CallbackHelper
     /** @param mixed $callback */
     private function getReflection($callback): ?ReflectionMethod
     {
-        switch (true) {
-            case \is_string($callback):
-                return new ReflectionMethod($callback);
-            case \is_array($callback):
-                return $this->fromArray($callback);
+        if (\is_string($callback)) {
+            return new ReflectionMethod($callback);
         }
-
+        if (\is_array($callback)) {
+            return $this->fromArray($callback);
+        }
         // $callback is an object
         return null;
     }
@@ -64,7 +63,7 @@ final class CallbackHelper
     /** @param array{string|object,string} $callback */
     private function fromArray(array $callback): ?ReflectionMethod
     {
-        if (\is_object($callback[0]) === true) {
+        if (\is_object($callback[0])) {
             return null;
         }
 

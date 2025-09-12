@@ -39,7 +39,7 @@ final class DiRuleList
 
     public function getRule(string $key): DiRule
     {
-        if ($this->hasRule($key) === true) {
+        if ($this->hasRule($key)) {
             return $this->rules[$key];
         }
 
@@ -50,7 +50,7 @@ final class DiRuleList
 
     private function addToList(DiRuleList $list, DiRule $rule): void
     {
-        if (\array_key_exists($rule->key(), $list->rules) === true) {
+        if (\array_key_exists($rule->key(), $list->rules)) {
             $oldRule = $list->rules[$rule->key()];
             $oldRule->cloneFrom($rule);
             $rule = $oldRule;

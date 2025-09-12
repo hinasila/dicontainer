@@ -38,11 +38,11 @@ final class DiParser
      */
     public function parse(?ReflectionMethod $method, array $passedValues, array $subs): array
     {
-        if ($method === null) {
+        if (!$method instanceof ReflectionMethod) {
             return [];
         }
 
-        if ($method->isPrivate() === true || $method->isProtected() === true) {
+        if ($method->isPrivate() || $method->isProtected()) {
             $name = $method->getDeclaringClass()->getName();
             $msg  = 'Access to non-public constructor of class ' . $name;
             throw new ContainerException($msg);
@@ -73,11 +73,11 @@ final class DiParser
      */
     private function processNameType(ReflectionParameter $param, ReflectionNamedType $type, array $subs, array &$values)
     {
-        if (\interface_exists($type->getName()) === true) {
+        if (\interface_exists($type->getName())) {
             return $this->interfaceValue($param, $type, $subs, $values);
         }
 
-        if (\class_exists($type->getName()) === true) {
+        if (\class_exists($type->getName())) {
             return $this->classValue($param, $type, $values);
         }
 
@@ -97,15 +97,15 @@ final class DiParser
         } catch (NoValueException $exc) {
         }
 
-        if (\array_key_exists($type->getName(), $subs) === true) {
+        if (\array_key_exists($type->getName(), $subs)) {
             return \call_user_func_array($this->creator, [$subs[$type->getName()]]);
         }
 
-        if ($param->isDefaultValueAvailable() === true) {
+        if ($param->isDefaultValueAvailable()) {
             return $param->getDefaultValue();
         }
 
-        if ($param->allowsNull() === true) {
+        if ($param->allowsNull()) {
             return null;
         }
 
@@ -134,11 +134,11 @@ final class DiParser
         } catch (NoValueException $exc) {
         }
 
-        if ($param->isDefaultValueAvailable() === true) {
+        if ($param->isDefaultValueAvailable()) {
             return $param->getDefaultValue();
         }
 
-        if ($param->allowsNull() === true) {
+        if ($param->allowsNull()) {
             return null;
         }
 
@@ -157,11 +157,11 @@ final class DiParser
         } catch (NoValueException $exc) {
         }
 
-        if ($param->isDefaultValueAvailable() === true) {
+        if ($param->isDefaultValueAvailable()) {
             return $param->getDefaultValue();
         }
 
-        if ($param->allowsNull() === true) {
+        if ($param->allowsNull()) {
             return null;
         }
 
@@ -185,7 +185,7 @@ final class DiParser
             throw new NoValueException();
         }
 
-        if (\is_array($values[0]) === true) {
+        if (\is_array($values[0])) {
             $call = (string) ($values[0][0] ?? '');
             switch ($call) {
                 case 'CALL::OBJECT':
@@ -194,18 +194,18 @@ final class DiParser
                     return $this->doCall(\array_shift($values));
                 case 'CALL::CONSTANT':
                     $const = \array_shift($values);
-                    if (empty($const[1]) === true || \is_string($const[1]) === false) {
+                    if (empty($const[1]) || \is_string($const[1]) === false) {
                         throw new ContainerException('Invalid CALL::CONSTANT format');
                     }
                     return \constant($const[1]);
             }
         }
 
-        if ($this->sameType($type->getName(), $values[0]) === true) {
+        if ($this->sameType($type->getName(), $values[0])) {
             return \array_shift($values);
         }
 
-        if ($values[0] === null && $allowsNull === true) {
+        if ($values[0] === null && $allowsNull) {
             return \array_shift($values);
         }
 
@@ -240,11 +240,11 @@ final class DiParser
             throw new NoValueException();
         }
 
-        if (\is_object($values[0]) === true && ($values[0] instanceof $className)) {
+        if ($values[0] instanceof $className) {
             return \array_shift($values);
         }
 
-        if ($values[0] === null && $allowsNull === true) {
+        if ($values[0] === null && $allowsNull) {
             return \array_shift($values);
         }
 
@@ -283,23 +283,22 @@ final class DiParser
      */
     private function mixedValue(ReflectionParameter $param, array &$values)
     {
-        if (isset($values[0]) === true && \is_array($values[0]) === true) {
+        if (isset($values[0]) && \is_array($values[0])) {
             $call = (string) ($values[0][0] ?? '');
             switch ($call) {
                 case 'CALL::OBJECT':
-                    return $this->doCall(\array_shift($values));
                 case 'CALL::SCALAR':
                     return $this->doCall(\array_shift($values));
                 case 'CALL::CONSTANT':
                     $const = \array_shift($values);
-                    if (empty($const[1]) === true || \is_string($const[1]) === false) {
+                    if (empty($const[1]) || \is_string($const[1]) === false) {
                         throw new ContainerException('Invalid CALL::CONSTANT format');
                     }
                     return \constant($const[1]);
             }
         }
 
-        if (\count($values) > 0) {
+        if ($values !== []) {
             return \array_shift($values);
         }
 
@@ -313,8 +312,9 @@ final class DiParser
             throw new ContainerException($msg);
         }
 
-        if ($param->isDefaultValueAvailable() === true) {
+        if ($param->isDefaultValueAvailable()) {
             return $param->getDefaultValue();
         }
+        return null;
     }
 }

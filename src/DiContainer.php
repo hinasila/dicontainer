@@ -63,7 +63,7 @@ final class DiContainer implements ContainerInterface
         }
 
         $rule = $this->list->getRule($id);
-        if ($rule->classname() === __CLASS__) {
+        if ($rule->classname() === self::class) {
             return clone $this;
         }
 
@@ -84,19 +84,19 @@ final class DiContainer implements ContainerInterface
      */
     private function getInstance(DiRule $rule)
     {
-        if (isset($this->instances[$rule->key()]) === true) {
+        if (isset($this->instances[$rule->key()])) {
             return $this->instances[$rule->key()];
         }
 
         if (
-            \array_key_exists($rule->key(), $this->curKeys) === true
-            || \in_array($rule->classname(), $this->curKeys) === true
+            \array_key_exists($rule->key(), $this->curKeys)
+            || \in_array($rule->classname(), $this->curKeys)
         ) {
             throw new ContainerException('Cyclic dependencies detected');
         }
 
         $classname = $rule->classname();
-        if (\is_object($classname) === true) {
+        if (\is_object($classname)) {
             return $classname;
         }
         $this->curKeys[$rule->key()] = $classname;
@@ -109,20 +109,17 @@ final class DiContainer implements ContainerInterface
             throw $exc;
         }
 
-        if ($rule->isShared() === true) {
+        if ($rule->isShared()) {
             $this->instances[$rule->key()] = $object;
         }
 
         return $object;
     }
 
-    /**
-     * @return object
-     */
-    private function createObject(DiRule $rule)
+    private function createObject(DiRule $rule): object
     {
         $ref = new ReflectionClass($rule->classname());
-        if ($ref->isAbstract() === true) {
+        if ($ref->isAbstract()) {
             throw new ContainerException('Cannot instantiate abstract class ' . $rule->classname());
         }
 
@@ -133,10 +130,8 @@ final class DiContainer implements ContainerInterface
     /**
      * @param ReflectionClass<Object> $ref
      * @param array<mixed> $params
-     *
-     * @return object
      */
-    private function getObject(ReflectionClass $ref, array $params)
+    private function getObject(ReflectionClass $ref, array $params): object
     {
         try {
             return $ref->newInstanceArgs($params);

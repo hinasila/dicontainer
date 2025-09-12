@@ -65,19 +65,13 @@ final class DiRule
         foreach ($rule->rules as $key => $values) {
             switch ($key) {
                 case 'instanceOf':
-                    $this->rules[$key] = $values;
-                    break;
                 case 'shared':
-                    $this->rules[$key] = $values;
-                    break;
                 case 'constructParams':
+                case 'getFrom':
                     $this->rules[$key] = $values;
                     break;
                 case 'substitutions':
                     $this->mergeInterface($values);
-                    break;
-                case 'getFrom':
-                    $this->rules[$key] = $values;
                     break;
             }
         }
