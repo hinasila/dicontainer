@@ -14,6 +14,9 @@ final class DiContainerBuilder
         $this->rules = new DiRuleList();
     }
 
+    /**
+     * @return DiContainer
+     */
     public function createContainer(): ContainerInterface
     {
         return new DiContainer($this->rules);
