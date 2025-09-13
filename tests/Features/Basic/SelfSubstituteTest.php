@@ -15,7 +15,7 @@ final class SelfSubstituteTest extends DicTestCase
 
         $this->assertInstanceOf(DiContainer::class, $obj->dic);
 
-        $listVar = new ReflectionProperty(DiContainer::class, 'list');
+        $listVar = new ReflectionProperty(DiContainer::class, 'rules');
         $listVar->setAccessible(true);
 
         // Separate DiContainer with identical roles

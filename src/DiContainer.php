@@ -7,15 +7,18 @@ use Hinasila\DiContainer\Exception\ContainerException;
 use Hinasila\DiContainer\Exception\NotFoundException;
 use Hinasila\DiContainer\Internal\CallbackHelper;
 use Hinasila\DiContainer\Internal\DiParser;
-use Hinasila\DiContainer\Internal\DiRule;
-use Hinasila\DiContainer\Internal\DiRuleList;
+use Hinasila\DiContainer\Rule\InjectRule;
+use Hinasila\DiContainer\Rule\RuleBuilder;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use Throwable;
 
 final class DiContainer implements ContainerInterface
 {
-    private $list;
+    /**
+     * @var array<string,InjectRule>
+     */
+    private $rules;
 
     private $callback;
 
@@ -31,38 +34,43 @@ final class DiContainer implements ContainerInterface
      */
     private $curKeys = [];
 
-    public function __construct(?DiRuleList $list = null)
+    /**
+     * @param array<string,InjectRule> $rules
+     */
+    public function __construct(array $rules = [])
     {
         $this->callback = new CallbackHelper($this);
         $this->parser   = new DiParser([$this, 'get'], $this->callback);
 
-        $this->list = $list ?? new DiRuleList();
-        $this->list->addRule(ContainerInterface::class, [
-          'instanceOf' => DiContainer::class,
-        ]);
+
+        $rules[ContainerInterface::class] = (new RuleBuilder(ContainerInterface::class))
+            ->resolveAs(DiContainer::class)
+            ->getRule();
+
+        $this->rules = $rules;
     }
 
     /**
-     * @param class-string $id
+     * @param class-string $serviceId
      */
-    public function has(string $id): bool
+    public function has(string $serviceId): bool
     {
-        return $this->list->hasRule($id) || \class_exists($id);
+        return \array_key_exists($serviceId, $this->rules) || \class_exists($serviceId);
     }
 
     /**
      * @template T of object
      *
-     * @param class-string<T> $id
+     * @param class-string<T> $serviceId
      * @return T
      */
-    public function get(string $id)
+    public function get(string $serviceId)
     {
-        if ($this->has($id) === false) {
-            throw new NotFoundException(\sprintf('Service "%s" does not exist', $id));
+        if ($this->has($serviceId) === false) {
+            throw new NotFoundException(\sprintf('Service "%s" does not exist', $serviceId));
         }
 
-        $rule = $this->list->getRule($id);
+        $rule = $this->getRule($serviceId);
         if ($rule->classname() === self::class) {
             return clone $this;
         }
@@ -82,48 +90,48 @@ final class DiContainer implements ContainerInterface
     /**
      * @return object
      */
-    private function getInstance(DiRule $rule)
+    private function getInstance(InjectRule $rule)
     {
-        if (isset($this->instances[$rule->key()])) {
-            return $this->instances[$rule->key()];
+        if (isset($this->instances[$rule->serviceId()])) {
+            return $this->instances[$rule->serviceId()];
         }
 
         if (
-            \array_key_exists($rule->key(), $this->curKeys)
+            \array_key_exists($rule->serviceId(), $this->curKeys)
             || \in_array($rule->classname(), $this->curKeys)
         ) {
             throw new ContainerException('Cyclic dependencies detected');
         }
 
         $classname = $rule->classname();
-        if (\is_object($classname)) {
-            return $classname;
-        }
-        $this->curKeys[$rule->key()] = $classname;
+        // if (\is_object($classname)) {
+        //     return $classname;
+        // }
+        $this->curKeys[$rule->serviceId()] = $classname;
 
         try {
             $object = $this->createObject($rule);
-            unset($this->curKeys[$rule->key()]);
+            unset($this->curKeys[$rule->serviceId()]);
         } catch (Throwable $exc) {
-            unset($this->curKeys[$rule->key()]);
+            unset($this->curKeys[$rule->serviceId()]);
             throw $exc;
         }
 
         if ($rule->isShared()) {
-            $this->instances[$rule->key()] = $object;
+            $this->instances[$rule->serviceId()] = $object;
         }
 
         return $object;
     }
 
-    private function createObject(DiRule $rule): object
+    private function createObject(InjectRule $rule): object
     {
         $ref = new ReflectionClass($rule->classname());
         if ($ref->isAbstract()) {
             throw new ContainerException('Cannot instantiate abstract class ' . $rule->classname());
         }
 
-        $params = $this->parser->parse($ref->getConstructor(), $rule->params(), $rule->substitutions());
+        $params = $this->parser->parse($ref->getConstructor(), $rule->params(), $rule->wireArgs());
         return $this->getObject($ref, $params);
     }
 
@@ -138,5 +146,14 @@ final class DiContainer implements ContainerInterface
         } catch (Error $exc) {
             throw new ContainerException($exc->getMessage(), 1, $exc);
         }
+    }
+
+    private function getRule(string $serviceId): InjectRule
+    {
+        if (!isset($this->rules[$serviceId])) {
+            return (new RuleBuilder($serviceId))->getRule();
+        }
+
+        return $this->rules[$serviceId];
     }
 }

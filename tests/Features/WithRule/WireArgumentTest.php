@@ -5,6 +5,7 @@ namespace Tests\Features\WithRule;
 use Hinasila\DiContainer\DiContainer;
 use Hinasila\DiContainer\DiContainerBuilder;
 use Hinasila\DiContainer\Exception\ContainerException;
+use Hinasila\DiContainer\Rule\RuleBuilder;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Tests\Fixtures\Substitution\BasicClass;
@@ -12,7 +13,7 @@ use Tests\Fixtures\Substitution\BasicImplementation;
 use Tests\Fixtures\Substitution\BasicInterface;
 use Tests\Fixtures\Substitution\NullableSubtitution;
 
-final class SubstitutionTest extends TestCase
+final class WireArgumentTest extends TestCase
 {
     public function test_missing_substitution(): void
     {
@@ -51,17 +52,21 @@ final class SubstitutionTest extends TestCase
         }
 
 
-        $dic = DiContainerBuilder::init()
-            ->bind(BasicInterface::class, stdClass::class)
+        $dic = (new DiContainerBuilder())
+            ->addRule(BasicClass::class, static function (RuleBuilder $rule): void {
+                $rule->wireArg(BasicInterface::class, stdClass::class);
+            })
             ->createContainer();
 
         $dic->get(BasicClass::class);
     }
 
-    public function test_substitution(): void
+    public function test_wiring(): void
     {
-        $dic = DiContainerBuilder::init()
-            ->bind(BasicInterface::class, BasicImplementation::class)
+        $dic = (new DiContainerBuilder())
+            ->addRule(BasicClass::class, static function (RuleBuilder $rule): void {
+                $rule->wireArg(BasicInterface::class, BasicImplementation::class);
+            })
             ->createContainer();
 
         $instance = $dic->get(BasicClass::class);

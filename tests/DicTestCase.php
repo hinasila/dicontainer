@@ -3,7 +3,6 @@
 namespace Tests;
 
 use Hinasila\DiContainer\DiContainer;
-use Hinasila\DiContainer\DiContainerBuilder;
 use PHPUnit\Framework\TestCase;
 
 abstract class DicTestCase extends TestCase
@@ -15,7 +14,6 @@ abstract class DicTestCase extends TestCase
 
     protected function setUp(): void
     {
-        $this->dic = DiContainerBuilder::init()
-            ->createContainer();
+        $this->dic = new DiContainer();
     }
 }

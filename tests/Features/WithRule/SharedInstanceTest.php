@@ -4,6 +4,7 @@ namespace Tests\Features\WithRule;
 
 use Hinasila\DiContainer\DiContainer;
 use Hinasila\DiContainer\DiContainerBuilder;
+use Hinasila\DiContainer\Rule\RuleBuilder;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Tests\Fixtures\NoConfig\ClassGraph;
@@ -29,8 +30,10 @@ final class SharedInstanceTest extends TestCase
 
     public function test_shared_instance(): void
     {
-        $dic = DiContainerBuilder::init()
-            ->asSingleton(stdClass::class)
+        $dic = (new DiContainerBuilder())
+            ->addRule(stdClass::class, static function (RuleBuilder $rule): void {
+                $rule->asSingleton();
+            })
             ->createContainer();
 
         $objA = $dic->get(stdClass::class);
@@ -41,8 +44,10 @@ final class SharedInstanceTest extends TestCase
 
     public function test_transient_instance(): void
     {
-        $dic = DiContainerBuilder::init()
-            ->asTransient(stdClass::class)
+        $dic = (new DiContainerBuilder())
+            ->addRule(stdClass::class, static function (RuleBuilder $rule): void {
+                $rule->asTransient();
+            })
             ->createContainer();
 
         $objA = $dic->get(stdClass::class);
