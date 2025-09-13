@@ -2,7 +2,7 @@
 
 namespace Hinasila\DiContainer;
 
-use Hinasila\DiContainer\Rule\InjectRule;
+use Hinasila\DiContainer\Internal\InjectRule;
 use Psr\Container\ContainerInterface;
 
 final class DiContainerBuilder
@@ -29,25 +29,4 @@ final class DiContainerBuilder
 
         return $this->rules[$serviceId];
     }
-
-    // /**
-    //  * @param class-string $serviceId
-    //  * @param Closure(RuleBuilder): void $callback
-    //  */
-    // public function addRule(string $serviceId, Closure $callback): self
-    // {
-    //     $builder = $this->getRuleBuilder($serviceId);
-    //     $callback($builder);
-
-    //     $this->rules[$serviceId] = $builder->getRule();
-
-    //     return $this;
-    // }
-
-    // private function getRuleBuilder(string $serviceId): RuleBuilder
-    // {
-    //     $rule = $this->rules[$serviceId] ?? null;
-
-    //     return new RuleBuilder($serviceId, $rule);
-    // }
 }

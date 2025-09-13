@@ -7,7 +7,7 @@ use Hinasila\DiContainer\Exception\ContainerException;
 use Hinasila\DiContainer\Exception\NotFoundException;
 use Hinasila\DiContainer\Internal\CallbackHelper;
 use Hinasila\DiContainer\Internal\DiParser;
-use Hinasila\DiContainer\Rule\InjectRule;
+use Hinasila\DiContainer\Internal\InjectRule;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use Throwable;
