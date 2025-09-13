@@ -2,12 +2,12 @@
 
 namespace Tests\Features\WithRule;
 
+use Fixtures\ClassGraph;
 use Hinasila\DiContainer\DiContainer;
 use Hinasila\DiContainer\DiContainerBuilder;
 use Hinasila\DiContainer\Rule\RuleBuilder;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use Tests\Fixtures\NoConfig\ClassGraph;
 
 final class SharedInstanceTest extends TestCase
 {

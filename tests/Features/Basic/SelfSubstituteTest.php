@@ -2,10 +2,10 @@
 
 namespace Tests\Features\Basic;
 
+use Fixtures\SelfSubstitute;
 use Hinasila\DiContainer\DiContainer;
 use ReflectionProperty;
 use Tests\DicTestCase;
-use Tests\Fixtures\NoConfig\SelfSubstitute;
 
 final class SelfSubstituteTest extends DicTestCase
 {

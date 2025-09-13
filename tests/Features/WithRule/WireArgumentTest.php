@@ -2,16 +2,21 @@
 
 namespace Tests\Features\WithRule;
 
+use Fixtures\BasicClass;
+use Fixtures\BasicConcrete;
+use Fixtures\BasicInterface;
+use Fixtures\ConfigA;
+use Fixtures\DefaultProvider;
+use Fixtures\DefaultProviderInterface;
+use Fixtures\MainWire;
+use Fixtures\NullableSubtitution;
+use Fixtures\ProviderConfigInterface;
 use Hinasila\DiContainer\DiContainer;
 use Hinasila\DiContainer\DiContainerBuilder;
 use Hinasila\DiContainer\Exception\ContainerException;
 use Hinasila\DiContainer\Rule\RuleBuilder;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use Tests\Fixtures\Substitution\BasicClass;
-use Tests\Fixtures\Substitution\BasicImplementation;
-use Tests\Fixtures\Substitution\BasicInterface;
-use Tests\Fixtures\Substitution\NullableSubtitution;
 
 final class WireArgumentTest extends TestCase
 {
@@ -61,11 +66,20 @@ final class WireArgumentTest extends TestCase
         $dic->get(BasicClass::class);
     }
 
+    public function test_nullable(): void
+    {
+        $dic = new DiContainer();
+
+        $instance = $dic->get(NullableSubtitution::class);
+
+        $this->assertNull($instance->obj);
+    }
+
     public function test_wiring(): void
     {
         $dic = (new DiContainerBuilder())
             ->addRule(BasicClass::class, static function (RuleBuilder $rule): void {
-                $rule->wireArg(BasicInterface::class, BasicImplementation::class);
+                $rule->wireArg(BasicInterface::class, BasicConcrete::class);
             })
             ->createContainer();
 
@@ -74,12 +88,16 @@ final class WireArgumentTest extends TestCase
         $this->assertInstanceOf(BasicInterface::class, $instance->obj);
     }
 
-    public function test_nullable(): void
+    public function test_complex_wiring(): void
     {
-        $dic = new DiContainer();
+        $dic = (new DiContainerBuilder())
+            ->addRule(DefaultProviderInterface::class, static function (RuleBuilder $rule): void {
+                $rule->resolveAs(DefaultProvider::class);
+                $rule->wireArg(ProviderConfigInterface::class, ConfigA::class);
+            })
+            ->createContainer();
 
-        $instance = $dic->get(NullableSubtitution::class);
-
-        $this->assertNull($instance->obj);
+        $instance = $dic->get(MainWire::class);
+        $this->assertInstanceOf(ConfigA::class, $instance->provider->config);
     }
 }

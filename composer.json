@@ -30,7 +30,10 @@
   "autoload-dev": {
     "psr-4": {
       "Tests\\": "tests"
-    }
+    },
+    "classmap": [
+      "tests/Fixtures"
+    ]
   },
   "require": {
     "php": "^7.2 || ^8.0",

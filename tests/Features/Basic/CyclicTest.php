@@ -2,9 +2,9 @@
 
 namespace Tests\Features\Basic;
 
+use Fixtures\CyclicA;
 use Hinasila\DiContainer\Exception\ContainerException;
 use Tests\DicTestCase;
-use Tests\Fixtures\Cyclic\CyclicA;
 
 final class CyclicTest extends DicTestCase
 {

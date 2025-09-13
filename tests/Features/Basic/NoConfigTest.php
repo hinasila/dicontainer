@@ -2,12 +2,12 @@
 
 namespace Tests\Features\Basic;
 
+use Fixtures\ClassGraph;
+use Fixtures\NullableObject;
+use Fixtures\ObjectDefaultValue;
+use Fixtures\ScalarDefaultValue;
+use Fixtures\ScalarNullable;
 use Tests\DicTestCase;
-use Tests\Fixtures\NoConfig\ClassGraph;
-use Tests\Fixtures\NoConfig\NullableObject;
-use Tests\Fixtures\NoConfig\ObjectDefaultValue;
-use Tests\Fixtures\NoConfig\ScalarDefaultValue;
-use Tests\Fixtures\NoConfig\ScalarNullable;
 
 final class NoConfigTest extends DicTestCase
 {
@@ -16,11 +16,11 @@ final class NoConfigTest extends DicTestCase
         $graph = $this->dic->get(ClassGraph::class);
 
         $this->assertInstanceOf(ClassGraph::class, $graph); // @phpstan-ignore method.alreadyNarrowedType
-        $this->assertInstanceOf('Tests\Fixtures\NoConfig\B', $graph->b);
-        $this->assertInstanceOf('Tests\Fixtures\NoConfig\C', $graph->b->c);
-        $this->assertInstanceOf('Tests\Fixtures\NoConfig\D', $graph->b->c->d);
-        $this->assertInstanceOf('Tests\Fixtures\NoConfig\E', $graph->b->c->e);
-        $this->assertInstanceOf('Tests\Fixtures\NoConfig\F', $graph->b->c->e->f);
+        $this->assertInstanceOf('Fixtures\B', $graph->b);
+        $this->assertInstanceOf('Fixtures\C', $graph->b->c);
+        $this->assertInstanceOf('Fixtures\D', $graph->b->c->d);
+        $this->assertInstanceOf('Fixtures\E', $graph->b->c->e);
+        $this->assertInstanceOf('Fixtures\F', $graph->b->c->e->f);
     }
 
     public function test_nullable_object(): void

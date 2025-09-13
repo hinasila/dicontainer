@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Fixtures\Cyclic;
+namespace Fixtures;
 
 class CyclicA {
     public function __construct(CyclicB $b){}

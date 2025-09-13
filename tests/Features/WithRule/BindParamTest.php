@@ -2,16 +2,16 @@
 
 namespace Tests\Features\WithRule;
 
+use Fixtures\ClassArray;
+use Fixtures\ClassBool;
+use Fixtures\ClassFloat;
+use Fixtures\ClassInt;
+use Fixtures\ClassString;
 use Hinasila\DiContainer\DiContainer;
 use Hinasila\DiContainer\DiContainerBuilder;
 use Hinasila\DiContainer\Exception\ContainerException;
 use Hinasila\DiContainer\Rule\RuleBuilder;
 use PHPUnit\Framework\TestCase;
-use Tests\Fixtures\BindParam\ClassArray;
-use Tests\Fixtures\BindParam\ClassBool;
-use Tests\Fixtures\BindParam\ClassFloat;
-use Tests\Fixtures\BindParam\ClassInt;
-use Tests\Fixtures\BindParam\ClassString;
 
 final class BindParamTest extends TestCase
 {
