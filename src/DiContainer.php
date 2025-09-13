@@ -2,6 +2,7 @@
 
 namespace Hinasila\DiContainer;
 
+use Closure;
 use Error;
 use Hinasila\DiContainer\Exception\ContainerException;
 use Hinasila\DiContainer\Exception\NotFoundException;
@@ -71,6 +72,11 @@ final class DiContainer implements ContainerInterface
             return clone $this;
         }
 
+
+        $closure = $rule->getClosure();
+        if ($closure instanceof Closure) {
+            return $closure();
+        }
         return $this->getInstance($rule);
 
 

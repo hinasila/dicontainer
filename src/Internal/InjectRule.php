@@ -2,6 +2,8 @@
 
 namespace Hinasila\DiContainer\Internal;
 
+use Closure;
+
 /**
  * @internal
  */
@@ -31,6 +33,11 @@ final class InjectRule
      * @var array<string,string>
      */
     private $bindArgs = [];
+
+    /**
+     * @var Closure|null
+     */
+    private $closure;
 
     public function __construct(string $serviceId, ?string $mapTo = null)
     {
@@ -87,6 +94,17 @@ final class InjectRule
     public function bindArg(string $interface, string $class): self
     {
         $this->bindArgs[$interface] = $class;
+        return $this;
+    }
+
+    public function getClosure(): ?Closure
+    {
+        return $this->closure;
+    }
+
+    public function useClosure(Closure $closure): self
+    {
+        $this->closure = $closure;
         return $this;
     }
 }
