@@ -30,7 +30,7 @@ final class SharedInstanceTest extends TestCase
     public function test_transient_instance(): void
     {
         $builder = new DiContainerBuilder();
-        $builder->map(stdClass::class)
+        $builder->newRule(stdClass::class)
             ->asTransient();
 
         $dic = $builder->createContainer();

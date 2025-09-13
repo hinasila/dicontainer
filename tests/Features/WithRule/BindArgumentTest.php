@@ -18,16 +18,6 @@ use stdClass;
 
 final class BindArgumentTest extends TestCase
 {
-    /**
-     * @var DiContainerBuilder
-     */
-    private $builder;
-
-    protected function setUp(): void
-    {
-        $this->builder = new DiContainerBuilder();
-    }
-
     public function test_missing_substitution(): void
     {
         $this->expectException(ContainerException::class);
@@ -64,20 +54,22 @@ final class BindArgumentTest extends TestCase
             ));
         }
 
-        $this->builder->map(BasicClass::class)
+        $builder = new DiContainerBuilder();
+        $builder->newRule(BasicClass::class)
             ->bindArg(BasicInterface::class, stdClass::class);
 
-        $dic = $this->builder->createContainer();
+        $dic = $builder->createContainer();
 
         $dic->get(BasicClass::class);
     }
 
     public function test_binding(): void
     {
-        $this->builder->map(BasicClass::class)
+        $builder = new DiContainerBuilder();
+        $builder->newRule(BasicClass::class)
             ->bindArg(BasicInterface::class, BasicConcrete::class);
 
-        $dic = $this->builder->createContainer();
+        $dic = $builder->createContainer();
 
         $instance = $dic->get(BasicClass::class);
 
@@ -86,10 +78,11 @@ final class BindArgumentTest extends TestCase
 
     public function test_complex_wiring(): void
     {
-        $this->builder->map(DefaultProviderInterface::class, DefaultProvider::class)
+        $builder = new DiContainerBuilder();
+        $builder->newRule(DefaultProviderInterface::class, DefaultProvider::class)
             ->bindArg(ProviderConfigInterface::class, ConfigA::class);
 
-        $dic = $this->builder->createContainer();
+        $dic = $builder->createContainer();
 
         $instance = $dic->get(MainWire::class);
         $this->assertInstanceOf(ConfigA::class, $instance->provider->config);

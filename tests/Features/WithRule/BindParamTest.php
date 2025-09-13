@@ -14,16 +14,6 @@ use PHPUnit\Framework\TestCase;
 
 final class BindParamTest extends TestCase
 {
-    /**
-     * @var DiContainerBuilder
-     */
-    private $builder;
-
-    protected function setUp(): void
-    {
-        $this->builder = new DiContainerBuilder();
-    }
-
     public function test_required_param(): void
     {
         $this->expectException(ContainerException::class);
@@ -50,20 +40,18 @@ final class BindParamTest extends TestCase
             )
         );
 
-        $this->builder->map(ClassString::class)
-            ->bindParams([123]);
-
-        $dic = $this->builder->createContainer();
+        $dic = (new DiContainerBuilder())
+            ->map(ClassString::class, null, [123])
+            ->createContainer();
 
         $dic->get(ClassString::class);
     }
 
     public function test_string(): void
     {
-        $this->builder->map(ClassString::class)
-            ->bindParams(['123', null]);
-
-        $dic = $this->builder->createContainer();
+        $dic = (new DiContainerBuilder())
+            ->map(ClassString::class, null, ['123', null])
+            ->createContainer();
 
         $instance = $dic->get(ClassString::class);
 
@@ -74,10 +62,9 @@ final class BindParamTest extends TestCase
 
     public function test_bool(): void
     {
-        $this->builder->map(ClassBool::class)
-            ->bindParams([true]);
-
-        $dic = $this->builder->createContainer();
+        $dic = (new DiContainerBuilder())
+            ->map(ClassBool::class, null, [true])
+            ->createContainer();
 
         $instance = $dic->get(ClassBool::class);
 
@@ -88,10 +75,9 @@ final class BindParamTest extends TestCase
 
     public function test_int(): void
     {
-        $this->builder->map(ClassInt::class)
-            ->bindParams([2025]);
-
-        $dic = $this->builder->createContainer();
+        $dic = (new DiContainerBuilder())
+            ->map(ClassInt::class, null, [2025])
+            ->createContainer();
 
         $instance = $dic->get(ClassInt::class);
 
@@ -102,10 +88,9 @@ final class BindParamTest extends TestCase
 
     public function test_float(): void
     {
-        $this->builder->map(ClassFloat::class)
-            ->bindParams([1e9]);
-
-        $dic = $this->builder->createContainer();
+        $dic = (new DiContainerBuilder())
+            ->map(ClassFloat::class, null, [1e9])
+            ->createContainer();
 
         $instance = $dic->get(ClassFloat::class);
 
@@ -116,10 +101,9 @@ final class BindParamTest extends TestCase
 
     public function test_array(): void
     {
-        $this->builder->map(ClassArray::class)
-            ->bindParams([[1e9]]);
-
-        $dic = $this->builder->createContainer();
+        $dic = (new DiContainerBuilder())
+            ->map(ClassArray::class, null, [[1e9]])
+            ->createContainer();
 
         $instance = $dic->get(ClassArray::class);
 
