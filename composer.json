@@ -32,7 +32,7 @@
       "Tests\\": "tests"
     },
     "classmap": [
-      "tests/Fixtures"
+      "tests/_fixtures"
     ]
   },
   "require": {

@@ -51,7 +51,6 @@ class ScalarNullable
     {
         $this->bool = $bool;
         $this->string = $string;
-        $this->string = $string;
         $this->int = $int;
         $this->float = $float;
         $this->array = $array;
