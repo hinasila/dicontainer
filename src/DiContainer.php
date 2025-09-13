@@ -8,7 +8,6 @@ use Hinasila\DiContainer\Exception\NotFoundException;
 use Hinasila\DiContainer\Internal\CallbackHelper;
 use Hinasila\DiContainer\Internal\DiParser;
 use Hinasila\DiContainer\Rule\InjectRule;
-use Hinasila\DiContainer\Rule\RuleBuilder;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use Throwable;
@@ -42,10 +41,7 @@ final class DiContainer implements ContainerInterface
         $this->callback = new CallbackHelper($this);
         $this->parser   = new DiParser([$this, 'get'], $this->callback);
 
-
-        $rules[ContainerInterface::class] = (new RuleBuilder(ContainerInterface::class))
-            ->resolveAs(DiContainer::class)
-            ->getRule();
+        $rules[ContainerInterface::class] = new InjectRule(ContainerInterface::class, self::class);
 
         $this->rules = $rules;
     }
@@ -75,16 +71,19 @@ final class DiContainer implements ContainerInterface
             return clone $this;
         }
 
-        $getFrom = $rule->getFrom();
-        if ($getFrom === []) {
-            return $this->getInstance($rule);
-        }
+        return $this->getInstance($rule);
 
-        $callback = \array_shift($getFrom);
-        $args     = \array_shift($getFrom);
 
-        $callback = $this->callback->toCallback($callback);
-        return \call_user_func_array($callback, (array) $args);
+        // $getFrom = $rule->getFrom();
+        // if ($getFrom === []) {
+        //     return $this->getInstance($rule);
+        // }
+
+        // $callback = \array_shift($getFrom);
+        // $args     = \array_shift($getFrom);
+
+        // $callback = $this->callback->toCallback($callback);
+        // return \call_user_func_array($callback, (array) $args);
     }
 
     /**
@@ -131,7 +130,7 @@ final class DiContainer implements ContainerInterface
             throw new ContainerException('Cannot instantiate abstract class ' . $rule->classname());
         }
 
-        $params = $this->parser->parse($ref->getConstructor(), $rule->params(), $rule->wireArgs());
+        $params = $this->parser->parse($ref->getConstructor(), $rule->getParams(), $rule->getBindArgs());
         return $this->getObject($ref, $params);
     }
 
@@ -151,7 +150,7 @@ final class DiContainer implements ContainerInterface
     private function getRule(string $serviceId): InjectRule
     {
         if (!isset($this->rules[$serviceId])) {
-            return (new RuleBuilder($serviceId))->getRule();
+            return new InjectRule($serviceId);
         }
 
         return $this->rules[$serviceId];

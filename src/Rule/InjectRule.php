@@ -15,34 +15,27 @@ final class InjectRule
     /**
      * @var string|null
      */
-    private $resolveAs;
+    private $mapTo;
 
     /**
      * @var bool
      */
-    private $shared;
+    private $shared = true;
 
     /**
      * @var array<mixed>
      */
-    private $params;
+    private $params = [];
 
     /**
      * @var array<string,string>
      */
-    private $wireArgs;
+    private $bindArgs = [];
 
-    /**
-     * @param array<mixed> $params
-     * @param array<string,string> $wireArgs
-     */
-    public function __construct(string $serviceId, ?string $resolveAs, array $params, array $wireArgs, bool $shared = true)
+    public function __construct(string $serviceId, ?string $mapTo = null)
     {
         $this->serviceId = $serviceId;
-        $this->resolveAs = $resolveAs;
-        $this->params    = $params;
-        $this->wireArgs  = $wireArgs;
-        $this->shared    = $shared;
+        $this->mapTo     = $mapTo;
     }
 
     public function serviceId(): string
@@ -52,12 +45,7 @@ final class InjectRule
 
     public function classname(): string
     {
-        return $this->resolveAs ?: $this->serviceId;
-    }
-
-    public function resolveAs(): ?string
-    {
-        return $this->resolveAs;
+        return $this->mapTo ?: $this->serviceId;
     }
 
     public function isShared(): bool
@@ -65,27 +53,40 @@ final class InjectRule
         return $this->shared;
     }
 
+    public function asTransient(): self
+    {
+        $this->shared = false;
+        return $this;
+    }
+
     /**
      * @return array<mixed>
      */
-    public function params(): array
+    public function getParams(): array
     {
         return $this->params;
     }
 
     /**
-     * @return array<mixed>
+     * @param array<mixed> $params
      */
-    public function wireArgs(): array
+    public function bindParams(array $params): self
     {
-        return $this->wireArgs;
+        $this->params = $params;
+        return $this;
     }
 
     /**
      * @return array<mixed>
      */
-    public function getFrom(): array
+    public function getBindArgs(): array
     {
-        return [];
+        return $this->bindArgs;
+    }
+
+    public function bindArg(string $interface, string $class): self
+    {
+        $this->bindArgs[$interface] = $class;
+        return $this;
     }
 }

@@ -4,9 +4,11 @@ namespace Tests\Features\Basic;
 
 use Fixtures\ClassGraph;
 use Fixtures\NullableObject;
+use Fixtures\NullableSubtitution;
 use Fixtures\ObjectDefaultValue;
 use Fixtures\ScalarDefaultValue;
 use Fixtures\ScalarNullable;
+use Hinasila\DiContainer\DiContainer;
 use Tests\DicTestCase;
 
 final class NoConfigTest extends DicTestCase
@@ -37,6 +39,15 @@ final class NoConfigTest extends DicTestCase
 
         $this->assertInstanceOf(ObjectDefaultValue::class, $obj); // @phpstan-ignore method.alreadyNarrowedType
         $this->assertNull($obj->obj);
+    }
+
+    public function test_nullable(): void
+    {
+        $dic = new DiContainer();
+
+        $instance = $dic->get(NullableSubtitution::class);
+
+        $this->assertNull($instance->obj);
     }
 
     public function test_scalar_default_value(): void

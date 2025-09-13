@@ -9,17 +9,25 @@ use Fixtures\ConfigA;
 use Fixtures\DefaultProvider;
 use Fixtures\DefaultProviderInterface;
 use Fixtures\MainWire;
-use Fixtures\NullableSubtitution;
 use Fixtures\ProviderConfigInterface;
 use Hinasila\DiContainer\DiContainer;
 use Hinasila\DiContainer\DiContainerBuilder;
 use Hinasila\DiContainer\Exception\ContainerException;
-use Hinasila\DiContainer\Rule\RuleBuilder;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
-final class WireArgumentTest extends TestCase
+final class BindArgumentTest extends TestCase
 {
+    /**
+     * @var DiContainerBuilder
+     */
+    private $builder;
+
+    protected function setUp(): void
+    {
+        $this->builder = new DiContainerBuilder();
+    }
+
     public function test_missing_substitution(): void
     {
         $this->expectException(ContainerException::class);
@@ -56,32 +64,20 @@ final class WireArgumentTest extends TestCase
             ));
         }
 
+        $this->builder->map(BasicClass::class)
+            ->bindArg(BasicInterface::class, stdClass::class);
 
-        $dic = (new DiContainerBuilder())
-            ->addRule(BasicClass::class, static function (RuleBuilder $rule): void {
-                $rule->wireArg(BasicInterface::class, stdClass::class);
-            })
-            ->createContainer();
+        $dic = $this->builder->createContainer();
 
         $dic->get(BasicClass::class);
     }
 
-    public function test_nullable(): void
+    public function test_binding(): void
     {
-        $dic = new DiContainer();
+        $this->builder->map(BasicClass::class)
+            ->bindArg(BasicInterface::class, BasicConcrete::class);
 
-        $instance = $dic->get(NullableSubtitution::class);
-
-        $this->assertNull($instance->obj);
-    }
-
-    public function test_wiring(): void
-    {
-        $dic = (new DiContainerBuilder())
-            ->addRule(BasicClass::class, static function (RuleBuilder $rule): void {
-                $rule->wireArg(BasicInterface::class, BasicConcrete::class);
-            })
-            ->createContainer();
+        $dic = $this->builder->createContainer();
 
         $instance = $dic->get(BasicClass::class);
 
@@ -90,12 +86,10 @@ final class WireArgumentTest extends TestCase
 
     public function test_complex_wiring(): void
     {
-        $dic = (new DiContainerBuilder())
-            ->addRule(DefaultProviderInterface::class, static function (RuleBuilder $rule): void {
-                $rule->resolveAs(DefaultProvider::class);
-                $rule->wireArg(ProviderConfigInterface::class, ConfigA::class);
-            })
-            ->createContainer();
+        $this->builder->map(DefaultProviderInterface::class, DefaultProvider::class)
+            ->bindArg(ProviderConfigInterface::class, ConfigA::class);
+
+        $dic = $this->builder->createContainer();
 
         $instance = $dic->get(MainWire::class);
         $this->assertInstanceOf(ConfigA::class, $instance->provider->config);
